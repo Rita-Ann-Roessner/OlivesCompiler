@@ -1,0 +1,8 @@
+{
+    "states":["GHSR-active.pdb","GHSR-inactive.pdb"],
+    "initial_model":"GHSR-active.pdb",
+    "ts_scaling": true,
+    "ts_cutoff": true,
+    "unique_pair_scaling": true,
+    "simulation_replica":2
+}   

@@ -1,0 +1,94 @@
+ [ macros ]
+protein_resnames "GLY|ALA|CYS|VAL|LEU|ILE|MET|PRO|HYP|ASN|GLN|ASP|ASPP|ASH|GLU|GLUP|GLH|THR|SER|LYS|LSN|LYN|ARG|ARG0|HIS|HISH|HSE|HSD|HSP|PHE|TYR|TRP|DGLY|DALA|DCYS|DVAL|DLEU|DILE|DMET|DPRO|DHYP|DASN|DGLN|DASP|DAPP|DGLU|DGLP|DTHR|DSER|DLYS|DLSN|DARG|DARG0|DHIS|DHISH|DHSE|DHSD|DHSP|DPHE|DTYR|DTRP"
+
+stiff_fc 30000
+
+;;;;;;;;;;;;;;;
+;;;; LINKS ;;;;
+;;;;;;;;;;;;;;;
+
+
+;;[ link ]  
+;;resname $protein_resnames
+;;[ exclusions ]
+;;C  +SC1   
+;;[ edges ]
+;;C  +N 
+;;+N  +CA
+;;+CA +SC1
+
+
+;;[ link ]  
+;;resname $protein_resnames
+;;[ cmap ]
+;;-C N CA C +N  1  
+;;[ edges ]
+;;-C  N 
+;;N  CA
+;;CA C
+;;C  +N
+
+
+[ link ]  
+resname $protein_resnames
+[ constraints ]
+;  i     j   funct   
+CA  +CA  1 0.379   {"edge":false, "group": "CA  — +CA ", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA  +CA  1 0.379   $stiff_fc {"edge":false, "group": "CA  — +CA ", "ifdef": "FLEXIBLE"}
+[ exclusions ]
+C  +C   
+[ edges ]
+CA  C 
+C  +N 
++N  +CA 
++C  +CA 
+
+[ link ]
+resname $protein_resnames
+[ bonds ]
+;  i     j   funct   length
+CA  -O  1 0.279 25000 {"edge": false, "group": "CA  — -O "}
+[ edges ]
+CA  -N 
+-N  -C 
+-C  -O 
+
+[ link ]
+resname $protein_resnames
+[ virtual_sites3 ]
+C    +CA   CA   O   1  0.45294  0.30173  {"edge": false, "group": "C  VS3 +CA  — CA  — O : C "}
+[ edges ]
+CA  C 
+CA  O 
+C  +N 
+C  O 
++N  +CA 
++CA  +O  
+[ exclusions ]
+C  +N  +O 
+O  +N             ;Should I also exclude O  -O  and N  +O  -N ... hmmm.          
+
+[ link ]
+resname $protein_resnames
+[ virtual_sites3 ]
++N    +CA   CA   O   1  0.49525  -0.22454 {"edge": false, "group": "N  VS3 +CA  — CA  — O : N "}
+[ edges ]
++N  +CA 
++N  C 
+C  O 
+C  CA 
+CA  O 
+
+
+;;;;;;;;;;;;;;;
+;;;; SC CY ;;;;
+;;;;;;;;;;;;;;;
+
+;; Cystein bridge
+[ link ]
+resname "CYS"
+[ constraints ]
+SC1 >SC1 1 0.24 {"comment": "Disulfide bridge"}
+[ features ]
+disulfide

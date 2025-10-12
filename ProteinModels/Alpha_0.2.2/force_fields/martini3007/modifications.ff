@@ -1,0 +1,236 @@
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+;  TERMINAL MODIFICATIONS
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+[ modification ]
+C-ter
+[ atoms ]
+C  {"replace": {"atype": "SQ5n", "mass": "32.0", "charge": -1.0}}  
+O  {"replace": {"atype": "U", "mass": "32.0", "charge": 0}}
+[ constraints ]
+CA     C     1       0.15   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+O      C     1       0.12   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA     C     1       0.15   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+O      C     1       0.12   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+[ dihedrals ]
+N CA C O  2  0.0  250 {"group": "C-TER", "edge":false}
+[ edges ]
+CA  C 
+CA  O 
+CA  N
+
+[ modification ]
+N-ter
+[ atoms ]
+N  {"replace": {"atype": "TQ5p", "charge": 1.0, "mass": "32.0"}}
+C  {"replace": {"charge": 0}} ;We keep it the same 
+[ constraints ]                           
+CA    N    1    0.170 {"edge": false, "group": "N-TER", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA    N    1    0.170   30000 {"edge": false, "group": "N-TER", "ifdef": "FLEXIBLE"}
+[ dihedrals ]
+N CA C O  2  -27.0  250 {"group": "N-TER", "edge":false}
+[ edges ]
+CA  C 
+CA  N 
+C   O
+
+
+[ modification ]
+COOH-ter
+[ atoms ]
+C  {"replace": {"atype": "SP2", "mass": "32.0", "charge": 0.0}}  
+O  {"replace": {"atype": "U", "mass": "32.0", "charge": 0.0}}
+[ constraints ]
+CA     C     1       0.15   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+O      C     1       0.12   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA     C     1       0.15   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+O      C     1       0.12   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+[ dihedrals ]
+N CA C O  2  0.0  250 {"group": "C-TER", "edge":false}
+[ edges ]
+CA  C 
+CA  O 
+CA  N
+
+
+[ modification ]
+CT1-ter
+[ atoms ]
+C  {"replace": {"atype": "U", "mass": "32.0", "charge": 0.0}}  
+O  {"replace": {"atype": "SN4a", "mass": "32.0", "charge": 0.0}}  ;could be N4a instead.
+[ constraints ]
+CA     C     1       0.15   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+O      C     1       0.12   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA     C     1       0.15   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+O      C     1       0.12   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+[ dihedrals ]
+N CA C O  2  0.0  250 {"group": "C-TER", "edge":false}
+[ edges ]
+CA  C 
+CA  O 
+CA  N
+
+
+[ modification ]
+CT2-ter
+[ atoms ]
+C  {"replace": {"atype": "U", "mass": "32.0", "charge": 0.0}}  
+O  {"replace": {"atype": "SP5", "mass": "32.0", "charge": 0.0}}  
+[ constraints ]
+CA     C     1       0.15   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+O      C     1       0.12   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA     C     1       0.15   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+O      C     1       0.12   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+[ dihedrals ]
+N CA C O  2  0.0  250 {"group": "C-TER", "edge":false}
+[ edges ]
+CA  C 
+CA  O 
+CA  N
+
+
+
+[ modification ]
+CT3-ter
+[ atoms ]
+C  {"replace": {"atype": "U", "mass": "32.0", "charge": 0.0}}  
+O  {"replace": {"atype": "SP3", "mass": "32.0", "charge": 0.0}}  
+[ constraints ]
+CA     C     1       0.15   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+O      C     1       0.12   {"group": "C-TER", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA     C     1       0.15   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+O      C     1       0.12   30000 {"group": "C-TER", "ifdef": "FLEXIBLE"}
+[ dihedrals ]
+N CA C O  2  0.0  250 {"group": "C-TER", "edge":false}
+[ edges ]
+CA  C 
+CA  O 
+CA  N
+
+
+[ modification ]
+NH2-ter
+[ atoms ]
+N  {"replace": {"atype": "TN6d", "charge": 0.0, "mass": "32.0"}}
+C  {"replace": {"charge": 0.0}} ;We keep it the same 
+[ constraints ]                           
+CA    N    1    0.170 {"edge": false, "group": "N-TER", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA    N    1    0.170   30000 {"edge": false, "group": "N-TER", "ifdef": "FLEXIBLE"}
+[ dihedrals ]
+N CA C O  2  -27.0  250 {"group": "N-TER", "edge":false}
+[ edges ]
+CA  C 
+CA  N 
+C   O
+
+
+[ modification ]
+NACE-ter
+[ atoms ]
+N  {"replace": {"atype": "SP3", "charge": 0.0, "mass": "32.0"}} ;Could be P2 or something
+C  {"replace": {"charge": 0.0}} ;We keep it the same 
+[ constraints ]                           
+CA    N    1    0.295 {"edge": false, "group": "N-TER", "ifndef": "FLEXIBLE"}
+[ bonds ]
+CA    N    1    0.170   30000 {"edge": false, "group": "N-TER", "ifdef": "FLEXIBLE"}
+[ dihedrals ]
+N CA C O  2  -27.0  250 {"group": "N-TER", "edge":false}
+[ edges ]
+CA  C 
+CA  N 
+C   O
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+;  GLUTAMATE MODIFICATIONS
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[ modification ]
+GLU-HE1
+[ atoms ]
+SC1 {"replace": {"atype": "P2", "charge": 0}}
+
+[ modification ]
+GLU-HE2
+[ atoms ]
+SC1 {"replace": {"atype": "P2", "charge": 0}}
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+;  ASPARTATE MODIFICATIONS
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[ modification ]
+ASP-HD1
+[ atoms ]
+SC1 {"replace": {"atype": "P2", "charge": 0}}
+
+[ modification ]
+ASP-HD2
+[ atoms ]
+SC1 {"replace": {"atype": "P2", "charge": 0}}
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+;  LYSINE MODIFICATIONS
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+[ modification ]
+LYS-LSN
+[ atoms ]
+SC2 {"resname": "LYS", "replace": {"atype": "SN6d", "charge": 0}}
+
+[ modification ]
+LYS-HZ3
+[ atoms ]
+SC2 {"replace": {"resname": "LYS"}}
+
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+;  HISTIDINE MODIFICATIONS
+; ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;[ modification ]
+;;HIS-HP
+;;[ atoms ]
+;;CA  {"resname": "HIS", "replace": {"resname": "HIS"}}
+;;SC1 {"resname": "HIS", "replace": {"resname": "HIS"}}
+;;SC2 {"resname": "HIS", "replace": {"atype": "TP1dq", "charge": "0.5", "resname": "HIS"}}
+;;SC3 {"resname": "HIS", "replace": {"atype": "TP1dq", "charge": "0.5", "resname": "HIS"}}
+;;[ edges ]
+;;CA SC1 
+;;SC1 SC2
+;;SC1 SC3
+;;SC2 SC3
+;;
+;;[ modification ]
+;;HIS-HE
+;;[ atoms ]
+;;CA  {"resname": "HIS", "replace": {"resname": "HIS"}}
+;;SC1 {"resname": "HIS", "replace": {"resname": "HIS"}}
+;;SC2 {"resname": "HIS", "replace": {"resname": "HIS"}}
+;;SC3 {"resname": "HIS", "replace": {"resname": "HIS"}}
+;;[ edges ]
+;;CA SC1 
+;;SC1 SC2
+;;SC1 SC3
+;;SC2 SC3
+;;
+;;[ modification ]
+;;HIS-HD
+;;[ atoms ]
+;;CA  {"resname": "HIS", "replace": {"resname": "HIS"}}
+;;SC1 {"resname": "HIS", "replace": {"resname": "HIS"}}
+;;SC2 {"resname": "HIS", "replace": {"resname": "HIS", "atype": "TN5a"}}
+;;SC3 {"resname": "HIS", "replace": {"resname": "HIS", "atype": "TN6a"}}
+;;[ edges ]
+;;CA SC1 
+;;SC1 SC2
+;;SC1 SC3
+;;SC2 SC3
+

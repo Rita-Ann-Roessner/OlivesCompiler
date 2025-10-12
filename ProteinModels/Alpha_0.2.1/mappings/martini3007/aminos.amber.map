@@ -1,0 +1,899 @@
+;
+
+[ molecule ]
+ALA
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N  SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB    SC1
+    6   HB1    !SC1
+    7   HB2    !SC1
+    8   HB3    !SC1
+    9     C    C 
+   10     O    O 
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+  HB3    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Ala
+; HA     CA    N    C    CB ; D-Ala
+;
+
+[ molecule ]
+ARG
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N  SC1 SC2 SC3 SC4
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   SC1
+    7   HB2   SC1
+    8    CG   SC1
+    9   HG1   SC1
+   10   HG2   SC1
+   11    CD   SC2 
+   12   HD1   SC2
+   13   HD2   SC2
+   14    NE   SC2
+   15    HE   SC2
+   16    CZ   SC3 SC4  
+   17   NH1   SC3
+   18  HH11   SC3 SC3
+   19  HH12   SC3 SC3
+   20   NH2   SC4
+   21  HH21   SC4 SC4 
+   22  HH22   SC4 SC4
+   23     C    C 
+   24     O    O 
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+[ chiral ]
+  HA     CA    N    CB    C ; L-Arg
+; HA     CA    N    C    CB ; D-Arg
+
+
+; The cis/trans are added to ensure proper
+; splitting of the guanidinium group
+
+[ trans ]
+; Because of the use of normalized vectors, this makes sense:
+  NH1    CZ    NE    HE
+
+[ out ]
+  NH2    CZ    NE    NH1
+  NH1    CZ    NE    NH2
+
+[ out ]
+ HH11    NH1   CZ   HH12
+ HH12    NH1   CZ   HH11
+ HH21    NH2   CZ   HH22
+ HH22    NH2   CZ   HH21
+;
+
+[ molecule ]
+ASN
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    CG   SC1
+    9   OD1   SC1
+   10   ND2   SC1
+   11  HD21   SC1
+   12  HD22   SC1
+   13     C    C
+   14     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Asn
+; HA     CA    N    C    CB ; D-Asn
+;
+
+[ molecule ]
+ASP
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    CG   SC1
+    9   OD1   SC1
+   10   OD2   SC1
+   11   HD2   !SC1
+   12     C    C
+   13     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Asp
+; HA     CA    N    C    CB ; D-Asp
+;
+
+[ molecule ]
+CYS
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    SG   SC1
+    9   HG1  !SC1
+   10     C    C
+   11     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Cys
+; HA     CA    N    C    CB ; D-Cys
+;
+
+[ molecule ]
+GLN
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    CG   SC1
+    9   HG1   !SC1
+   10   HG2   !SC1
+   11    CD   SC1 
+   12   OE1   SC1
+   13   NE2   SC1
+   14  HE21   SC1
+   15  HE22   SC1
+   16  HE11   SC1
+   17  HE12   SC1
+   18     C    C
+   19     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Gln
+; HA     CA    N    C    CB ; D-Gln
+;
+
+[ molecule ]
+GLU
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    CG   SC1
+    9   HG1   !SC1
+   10   HG2   !SC1
+   11    CD   SC1
+   12   OE1   SC1
+   13   OE2   SC1
+   14   HE2   !SC1
+   15     C    C
+   16     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Glu
+; HA     CA    N    C    CB ; D-Glu
+;
+
+[ molecule ]
+GLY
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA
+    4   HA1    !CA
+    5   HA2    !CA
+    9     C    C
+   10     O    O
+;
+
+[ molecule ]
+HIS  
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1 SC2 SC3
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8   CD2   SC2
+    9   HD2   SC2
+   10    CG   SC1
+   11   NE2   SC2
+   12   HE2   SC2
+   13   ND1   SC3
+   14   CE1   SC3
+   15     C    C
+   16     O    O
+;
+
+[ molecule ]
+ILE
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6    HB   !SC1
+    7   CG2   SC1
+    8  HG21   !SC1
+    9  HG22   !SC1
+   10  HG23   !SC1
+   11   CG1   SC1
+   12  HG11   !SC1
+   13  HG12   !SC1
+   14    CD   SC1
+   15   HD1   !SC1
+   16   HD2   !SC1
+   17   HD3   !SC1
+   18     C    C
+   19     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Ile
+; HA     CA    N    C    CB ; D-Ile
+
+[ out ]
+CG2 CB CG1 CA
+HG21 CB CG1 CA
+HG22 CB CG1 CA
+HG23 CB CG1 CA
+
+[ chiral ]
+  HB     CB    CA   CG2   CG1  ; 3S stereoisomer (natural form)
+; HB     CB    CA   CG1   CG2  ; 3R stereoisomer
+;
+
+[ molecule ]
+LEU
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    CG   SC1
+    9    HG   !SC1
+   10   CD1   SC1
+   11  HD11   !SC1
+   12  HD12   !SC1
+   13  HD13   !SC1
+   14   CD2   SC1
+   15  HD21   !SC1
+   16  HD22   !SC1
+   17  HD23   !SC1
+   18     C    C
+   19     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Leu
+; HA     CA    N    C    CB ; D-Leu
+
+[ out ] 
+CD2  CG CD1 CB
+HD21 CG CD1 CB
+HD22 CG CD1 CB
+HD23 CG CD1 CB
+;
+
+[ molecule ]
+LYS
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1 SC2
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    CG   SC1
+    9   HG1   !SC1
+   10   HG2   !SC1
+   11    CD   SC1
+   12   HD1   !SC1
+   13   HD2   !SC1
+   14    CE   SC2
+   15   HE1   !SC2
+   16   HE2   !SC2
+   17    NZ   SC2
+   18   HZ1   SC2
+   19   HZ2   SC2
+   20   HZ3   SC2
+   21     C    C
+   22     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Lys
+; HA     CA    N    C    CB ; D-Lys
+;
+
+[ molecule ]
+MET
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    CG   SC1
+    9   HG1   !SC1
+   10   HG2   !SC1
+   11    SD   SC1
+   12    CE   SC1
+   13   HE1   !SC1
+   14   HE2   !SC1
+   15   HE3   !SC1
+   16     C    C
+   17     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Met
+; HA     CA    N    C    CB ; D-Met
+;
+
+[ molecule ]
+PHE
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1 SC2 SC3
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   SC1
+    7   HB2   SC1
+    8    CG   SC1
+    9   CD1   SC1 SC2 SC2
+   10   HD1   SC1 SC2 SC2
+   11   CE1   SC2
+   12   HE1   SC2
+   13    CZ   SC3 SC2
+   14    HZ   SC3 SC2
+   15   CD2   SC3 SC3 SC1
+   16   HD2   SC3 SC3 SC1
+   17   CE2   SC3
+   18   HE2   SC3
+   19     C    C
+   20     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Phe
+; HA     CA    N    C    CB ; D-Phe
+
+
+[ out ]
+; Add some helper points
+P CD1 CD2 CZ
+Q CD2 CD1 CZ
+R CZ  CD1 CD2
+
+[ trans ]
+; Place hydrogens using helper points
+HD1   P CE1   R
+HD2   Q CE2   R
+HE1 CE1   P  CG
+HE2 CE2   Q  CG
+HZ    R CE1   P 
+
+[ out ]
+; Place ring carbons
+CD1 CE1 HE1 R
+CD2 CE2 HE2 R
+CZ  CE1 HE1 P
+;
+
+[ molecule ]
+PRO
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N
+    2    CD   SC1
+    3   HD1   !SC1
+    4   HD2   !SC1
+    5    CA    CA
+    6    HA    !CA
+    7    CB   SC1
+    8   HB1   !SC1
+    9   HB2   !SC1
+   10    CG   SC1
+   11   HG1   !SC1
+   12   HG2   !SC1
+   13     C    C
+   14     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Pro
+; HA     CA    N    C    CB ; D-Pro
+;
+
+[ molecule ]
+SER
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    OG   SC1
+    9   HG1   SC1
+   10     C    C
+   11     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB1    CA    N    C
+  HB2    CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Ser
+; HA     CA    N    C    CB ; D-Ser
+;
+
+[ molecule ]
+THR
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6    HB   !SC1
+    7   OG1   SC1
+    8   HG1   SC1
+    9   CG2   SC1 
+   10  HG21   !SC1
+   11  HG22   !SC1
+   11  HG23   !SC1
+   13     C    C
+   14     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB     CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Thr
+; HA     CA    N    C    CB ; D-Thr
+
+[ out ] 
+OG1 CB CG2 CA
+[ trans ]
+HG1 OG1 CB CA
+
+[ chiral ]
+  HB  CB  CG2  OG1 CA  ; 3R stereoisomer (natural form)
+; HB  CB  CG2  CA  CG1 ; 3S stereoisomer
+;
+
+[ molecule ]
+TRP
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N  SC1 SC2 SC3 SC4 SC5
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC2
+    8    CG   SC1
+    9   CD1   SC2 
+   10   HD1   SC2
+   11   NE1   SC2
+   12   HE1   SC2
+   13   CE2   SC3
+   14   CD2   SC3
+   15   CE3   SC4
+   16   HE3   SC4
+   17   CZ3   SC4
+   18   HZ3   SC4 
+   19   CZ2   SC5
+   20   HZ2   SC5 
+   21   CH2   SC5
+   22   HH2   SC5
+   23     C    C
+   24     O    O
+;
+
+[ molecule ]
+TYR
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N  SC1 SC2 SC3 SC4
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6   HB1   !SC1
+    7   HB2   !SC1
+    8    CG   SC1
+    9   CD1   SC2
+   10   HD1   SC2
+   11   CE1   SC2
+   12   HE1   SC2
+   13    CZ   SC4
+   14    OH   SC4
+   15    HH   SC4
+   16   CD2   SC3
+   17   HD2   SC3
+   18   CE2   SC3
+   19   HE2   SC3
+   20     C    C
+   21     O    O
+;
+
+[ molecule ]
+VAL
+
+[from]
+amber
+
+[to]
+martini3007
+
+[ martini ]
+C  CA  O  N SC1
+
+[ mapping ]
+amber27 amber36
+
+[ atoms ]
+    1     N    N 
+    2    HN    N 
+    3    CA    CA 
+    4    HA    !CA 
+    5    CB   SC1
+    6    HB   !SC1
+    8   CG1   SC1 
+    9  HG11   !SC1
+   10  HG12   !SC1
+   11  HG13   !SC1
+   12   CG2   SC1
+   13  HG21   !SC1
+   14  HG22   !SC1
+   15  HG23   !SC1
+   16     C    C
+   17     O    O
+
+[ chiral ]
+  CB     CA    N    C
+  HB     CA    N    C
+
+[ chiral ]
+  HA     CA    N    CB    C ; L-Val
+; HA     CA    N    C    CB ; D-Val
+
+[ out ]
+  CG2  CB CG1 CA
+  HG21 CB CG1 CA
+  HG22 CB CG1 CA
+  HG23 CB CG1 CA

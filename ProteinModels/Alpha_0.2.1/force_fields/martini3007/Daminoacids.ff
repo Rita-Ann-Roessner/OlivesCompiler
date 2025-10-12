@@ -1,0 +1,1222 @@
+[ macros ]
+prot_default_bb_type SP1
+prot_PRO_bb_type SP1a
+pos  0.1
+neg -0.1
+stiff_fc 30000
+
+;;;;;;;;;;;;;;;;;
+;;; D-ALANINE ;;;
+;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DALA                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DALA    C      1      0    0
+ 2   U                        1   DALA    CA     2      0   44
+ 3   U                        1   DALA    O      3   $neg   32
+ 4   U                        1   DALA    N      4   $pos    0
+ 5   TC2                      1   DALA    SC1    5      0            
+
+[ edges ]
+ N   CA 
+ CA  C 
+ CA  O 
+ C   O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.165   10000     {"group": "DALA"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+  
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA    C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA    N      10        110.0      250 {"group": "DALA",  "edge":false}    
+ SC1  CA    O      10        105.0       45 {"group": "DALA",  "edge":false}  
+ 
+[ dihedrals ]
+ SC1 CA  N  C       2   124.0 250    {"group": "DALA",  "edge":false}  
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DALA",  "edge":false}  
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DALA",  "edge":false}  
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DALA",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+;;;;;;;;;;;;;;;;
+;;; D-Valine ;;;
+;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DVAL                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DVAL    C      1      0    0
+ 2   U                        1   DVAL    CA     2      0   44
+ 3   U                        1   DVAL    O      3   $neg   32
+ 4   U                        1   DVAL    N      4   $pos    0
+ 5   SC2                      1   DVAL    SC1    5      0            
+
+[ edges ]
+ N   CA 
+ CA  C 
+ CA  O 
+ C   O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.21    10000     {"group": "DVAL"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA    C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA    N      10        105.0       70 {"group": "DVAL",  "edge":false}  
+ SC1  CA    O      10        112.5       40 {"group": "DVAL",  "edge":false}  
+ 
+[ dihedrals ]
+ SC1 CA  N  C       2   135.0  150   {"group": "DVAL",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DVAL",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DVAL",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DVAL",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+
+;;;;;;;;;;;;;;;;;;;;
+;;; D-Isoleucine ;;;
+;;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DILE                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+  1   $prot_default_bb_type    1   DILE    C      1      0    0
+ 2   U                         1   DILE    CA     2      0   44
+ 3   U                         1   DILE    O      3   $neg   32
+ 4   U                         1   DILE    N      4   $pos    0
+ 5   C1r                       1   DILE    SC1    5      0            
+
+[ edges ]
+ N   CA 
+ CA  C 
+ CA  O 
+ C   O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.235   10000 {"group": "DILE"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA    C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA    N      10        107.0       75 {"group": "DILE",  "edge":false}  
+ SC1  CA    O      10        115.0       30 {"group": "DILE",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   140.0  70    {"group": "DILE",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DILE",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DILE",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DILE",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+
+
+;;;;;;;;;;;;;;;;;
+;;; D-Leucine ;;;
+;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DLEU                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type     1   DLEU    C      1      0    0
+ 2   U                         1   DLEU    CA     2      0   44
+ 3   U                         1   DLEU    O      3   $neg   32
+ 4   U                         1   DLEU    N      4   $pos    0
+ 5   C1r                       1   DLEU    SC1    5      0            
+
+[ edges ]
+ N   CA 
+ CA  C 
+ CA  O 
+ C   O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.270   10000     {"group": "DLEU"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA    C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA    N      10        103.0      100 {"group": "DLEU",  "edge":false}  
+ SC1  CA    O      10        120.0       20 {"group": "DLEU",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   152.0  75    {"group": "DLEU",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DLEU",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DLEU",  "edge":false}
+ SC1 CA  O  C       9   100.0  .5  1 {"group": "DLEU",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+
+;;;;;;;;;;;;;;;;;;;;
+;;; D-Methionine ;;;
+;;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DMET                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+  1   $prot_default_bb_type    1   DMET    C      1      0    0
+ 2   U                         1   DMET    CA     2      0   44
+ 3   U                         1   DMET    O      3   $neg   32
+ 4   U                         1   DMET    N      4   $pos    0
+ 5   C6                        1   DMET    SC1    5      0            
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.300    9000     {"group": "DMET"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA    C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA    N      10         86.0       15 {"group": "DMET",  "edge":false}  
+ SC1  CA    O      10        115.0       10 {"group": "DMET",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   157.0  40    {"group": "DMET",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DMET",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DMET",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DMET",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+
+;;;;;;;;;;;;;;;;;;;;;;;
+;;; D-Phenylalanine ;;;
+;;;;;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DPHE                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DPHE    C      1      0    0
+ 2   U                        1   DPHE    CA     2      0   44
+ 3   U                        1   DPHE    O      3   $neg   32
+ 4   U                        1   DPHE    N      4   $pos    0
+ 5   SC4                      1   DPHE    SC1    5      0        
+ 6   TC5                      1   DPHE    SC2    6      0        
+ 7   TC5                      1   DPHE    SC3    7      0        
+ 
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O    1       0.238  {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+ SC1   SC2    1       0.310  {"group": "DPHE", "ifndef": "FLEXIBLE"}
+ SC1   SC3    1       0.310  {"group": "DPHE", "ifndef": "FLEXIBLE"}
+ SC2   SC3    1       0.310  {"group": "DPHE", "ifndef": "FLEXIBLE"}
+  
+[ bonds ]
+;  i     j   funct   length
+  CA    O     1       0.238  $stiff_fc  {"group": "CA  — O ", "ifdef": "FLEXIBLE"} 
+  CA   SC1    1       0.245   10000     {"group": "DPHE"}                      
+ SC1   SC2    1       0.310  $stiff_fc  {"group": "DPHE", "ifdef": "FLEXIBLE"}
+ SC1   SC3    1       0.310  $stiff_fc  {"group": "DPHE", "ifdef": "FLEXIBLE"}
+ SC2   SC3    1       0.310  $stiff_fc  {"group": "DPHE", "ifdef": "FLEXIBLE"}
+ 
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA    C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA    N      10        115.0       40 {"group": "DPHE",  "edge":false}  
+ SC1  CA    O      10        100.0       20 {"group": "DPHE",  "edge":false}  
+ CA   SC1  SC2     10        130.0       35 {"group": "DPHE"}   
+ CA   SC1  SC3     10        130.0       35 {"group": "DPHE"}
+ CA   SC2  SC3      1         70.0       40 {"group": "DPHE"}
+ 
+[ dihedrals ]
+;i  j   k   l     fun.  ref.    k     m
+ SC1 CA  N   C      2   145.0  75       {"group": "DPHE",  "edge":false}
+ SC1 CA  O   C      9    10.0   5     2 {"group": "DPHE",  "edge":false}
+ SC1 CA  O   C      9    10.0   4     1 {"group": "DPHE",  "edge":false}
+ SC1 CA  O   C      9   100.0   1.5   1 {"group": "DPHE",  "edge":false}
+ CA  SC2 SC3 SC1    1   180.0   5     1 {"group": "DPHE"}
+ O   CA  SC1 SC2    9  -120     2     3 {"group": "DPHE"}
+ O   CA  SC1 SC2    9  -100     1     1 {"group": "DPHE"}
+
+[ exclusions ]
+  O  N  C SC1 SC2 SC3
+  N  C SC1 SC2 SC3
+  C  SC1
+
+;;;;;;;;;;;;;;;;;;;;
+;;; D-Tryptophan ;;;
+;;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DTRP                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DTRP    C      1      0      0
+ 2   U                        1   DTRP    CA     2      0     44
+ 3   U                        1   DTRP    O      3   $neg     32
+ 4   U                        1   DTRP    N      4   $pos      0
+ 5   TC4                      1   DTRP    SC1    5      0     36
+ 6   TN6d                     1   DTRP    SC2    6      0     36
+ 7   TC5e                     1   DTRP    SC3    7      0      0  
+ 8   TC5                      1   DTRP    SC4    8      0     36
+ 9   TC5                      1   DTRP    SC5    9      0     36
+ 
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O    1       0.238  {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+ SC1   SC2    1       0.300  {"group": "DTRP", "ifndef": "FLEXIBLE"}
+ SC2   SC5    1       0.412  {"group": "DTRP", "ifndef": "FLEXIBLE"}
+ SC4   SC5    1       0.293  {"group": "DTRP", "ifndef": "FLEXIBLE"}
+ SC1   SC4    1       0.404  {"group": "DTRP", "ifndef": "FLEXIBLE"}
+ SC2   SC4    1       0.470  {"group": "DTRP", "ifndef": "FLEXIBLE"}
+  
+[ bonds ]
+;  i     j   funct   length
+  CA     O    1       0.238  $stiff_fc  {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA   SC1    1       0.195  10000      {"group": "DTRP"}
+ SC1   SC2    1       0.300  $stiff_fc  {"group": "DTRP", "ifdef": "FLEXIBLE"}
+ SC2   SC5    1       0.412  $stiff_fc  {"group": "DTRP", "ifdef": "FLEXIBLE"}
+ SC4   SC5    1       0.293  $stiff_fc  {"group": "DTRP", "ifdef": "FLEXIBLE"}
+ SC1   SC4    1       0.404  $stiff_fc  {"group": "DTRP", "ifdef": "FLEXIBLE"}
+ SC2   SC4    1       0.470  $stiff_fc  {"group": "DTRP", "ifdef": "FLEXIBLE"}
+ 
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        115.0       60 {"group": "DTRP",  "edge":false} 
+ SC1  CA   O      10        105.0       50 {"group": "DTRP",  "edge":false}  
+ CA   SC1  SC2    10        117.0       75 {"group": "DTRP"}
+ CA   SC1  SC4    10        105.0       30 {"group": "DTRP"}  
+ CA   SC2  SC4     1         65.0       75 {"group": "DTRP"}  
+ 
+[ dihedrals ]
+ SC1 CA  N   C     2   130.0  80    {"group": "DTRP",  "edge":false}
+ SC1 CA  O   C     9    10.0   5  2 {"group": "DTRP",  "edge":false}
+ SC1 CA  O   C     9    10.0   4  1 {"group": "DTRP",  "edge":false}
+ SC1 CA  O   C     9   100.0 1.5  1 {"group": "DTRP",  "edge":false}
+ SC1 SC2 SC4 SC5   2   180.0 200    {"group": "DTRP"}
+ CA  SC2 SC4 SC1   1   180.0   5  1 {"group": "DTRP"}
+ O   CA  SC1 SC4   9  -145.0   3  3 {"group": "DTRP"}
+ O   CA  SC1 SC4   9  -120.0   1  1 {"group": "DTRP"}
+ O   CA  SC1 SC2   9   -45.0 2.5  1 {"group": "DTRP"}
+ O   CA  SC1 SC2   9   -40.0   1  4 {"group": "DTRP"}
+
+[ virtual_sitesn ]
+ SC3 SC5 SC4 SC2 SC1 -- 2
+
+[ exclusions ]
+ O  N  C SC1 SC2 SC3 SC4 SC5
+ N  C SC1 SC2 SC3 SC4 SC5
+ C  SC1 
+ SC3 SC1 SC2 SC4 SC5
+
+;;;;;;;;;;;;;;;;;;
+;;; D-Tyrosine ;;;
+;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DTYR                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DTYR    C      1      0      0
+ 2   U                        1   DTYR    CA     2      0     44
+ 3   U                        1   DTYR    O      3   $neg     32
+ 4   U                        1   DTYR    N      4   $pos      0
+ 5   TC4                      1   DTYR    SC1    5      0  
+ 6   TC5                      1   DTYR    SC2    6      0        
+ 7   TC5                      1   DTYR    SC3    7      0  
+ 8   TN6                      1   DTYR    SC4    8      0
+ 
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ constraints ]
+;  i     j   funct   length
+ CA     O     1       0.238  {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+ SC1   SC2    1       0.300  {"group": "DTYR", "ifndef": "FLEXIBLE"}
+ SC1   SC3    1       0.300  {"group": "DTYR", "ifndef": "FLEXIBLE"}
+ SC2   SC4    1       0.285  {"group": "DTYR", "ifndef": "FLEXIBLE"}
+ SC3   SC4    1       0.285  {"group": "DTYR", "ifndef": "FLEXIBLE"}
+ SC2   SC3    1       0.300  {"group": "DTYR", "ifndef": "FLEXIBLE"}
+  
+[ bonds ]
+;  i     j   funct   length
+ CA     O     1       0.238  $stiff_fc  {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+ CA    SC1    1       0.195  10000      {"group": "DTYR"}
+ SC1   SC2    1       0.300  $stiff_fc  {"group": "DTYR", "ifdef": "FLEXIBLE"}
+ SC1   SC3    1       0.300  $stiff_fc  {"group": "DTYR", "ifdef": "FLEXIBLE"}
+ SC2   SC4    1       0.285  $stiff_fc  {"group": "DTYR", "ifdef": "FLEXIBLE"}
+ SC3   SC4    1       0.285  $stiff_fc  {"group": "DTYR", "ifdef": "FLEXIBLE"}
+ SC2   SC3    1       0.300  $stiff_fc  {"group": "DTYR", "ifdef": "FLEXIBLE"}
+ 
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10       112.5       275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10       115.0       150 {"group": "DTYR",  "edge":false} 
+ SC1  CA   O      10       101.0        50 {"group": "DTYR",  "edge":false}  
+ SC2  CA   O      10       100.0        10 {"group": "DTYR"}  
+ CA   SC1  SC2    10       115.0        35 {"group": "DTYR"}  
+ CA   SC1  SC3    10       115.0        35 {"group": "DTYR"}
+ CA   SC1  SC4     1       120.0        35 {"group": "DTYR"}
+ CA   SC2  SC3     1        66.0        40 {"group": "DTYR"}
+
+[ dihedrals ]
+ SC1 CA  N   C     2   135.0  75    {"group": "DTYR",  "edge":false}
+ SC1 CA  O   C     9    10.0   5  2 {"group": "DTYR",  "edge":false}
+ SC1 CA  O   C     9    10.0   4  1 {"group": "DTYR",  "edge":false}
+ SC1 CA  O   C     9   100.0   2  1 {"group": "DTYR",  "edge":false}
+ SC1 SC2 SC3 SC4   2   180.0 100    {"group": "DTYR",  "edge":false}
+ CA  SC2 SC3 SC1   1   180.0   5  1 {"group": "DTYR",  "edge":false}
+ O   CA  SC1 SC2   9   -65.0 2.5  1 {"group": "DTYR"}
+ O   CA  SC1 SC2   9   -40.0   1  4 {"group": "DTYR"}
+ O   CA  SC2 SC3   9   130.0 2.5  2 {"group": "DTYR"}
+ O   CA  SC2 SC3   9   -10.0   1  1 {"group": "DTYR"}
+
+[ exclusions ]
+ O  N  C  SC1 SC2 SC3 SC4
+ N  C  SC1 SC2 SC3 SC4
+ C  SC1
+
+;;;;;;;;;;;;;;;;
+;;; D-Serine ;;;
+;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DSER                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DSER    C      1      0    0
+ 2   U                        1   DSER    CA     2      0   44
+ 3   U                        1   DSER    O      3   $neg   32
+ 4   U                        1   DSER    N      4   $pos    0
+ 5   TP1                      1   DSER    SC1    5      0            
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.185   10000  {"group": "DSER"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10       112.5       275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        110.0       60 {"group": "DSER",  "edge":false}  
+ SC1  CA   O      10        115.0       30 {"group": "DSER",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   125.0  90    {"group": "DSER",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DSER",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DSER",  "edge":false}
+ SC1 CA  O  C       9   100.0  .5  1 {"group": "DSER",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+
+;;;;;;;;;;;;;;;;;;;
+;;; D-Threonine ;;;
+;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DTHR                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DTHR    C      1      0    0
+ 2   U                        1   DTHR    CA     2      0   44
+ 3   U                        1   DTHR    O      3   $neg   32
+ 4   U                        1   DTHR    N      4   $pos    0
+ 5   SP1                      1   DTHR    SC1    5      0            
+
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.210   10000 {"group": "DTHR"}
+  
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        100.0      150 {"group": "DTHR",  "edge":false}  
+ SC1  CA   O      10        110.0       30 {"group": "DTHR",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   135.0 100    {"group": "DTHR",  "edge":false}
+ SC1 CA  O  C       9    10.0   6  2 {"group": "DTHR",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DTHR",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+
+;;;;;;;;;;;;;;;;;;;;
+;;; D-Asparagine ;;;
+;;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DASN                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DASN    C      1      0    0
+ 2   U                        1   DASN    CA     2      0   44
+ 3   U                        1   DASN    O      3   $neg   32
+ 4   U                        1   DASN    N      4   $pos    0
+ 5   P5                       1   DASN    SC1    5      0            
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.280    9000 {"group": "DASN"}
+  
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        107.0       20 {"group": "DASN",  "edge":false}  
+ SC1  CA   O      10        105.0       10 {"group": "DASN",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   152.5  60  {"group": "DASN",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DASN",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DASN",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DASN",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+
+;;;;;;;;;;;;;;;;;;;
+;;; D-Glutamine ;;; 
+;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DGLN                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DGLN    C      1      0    0
+ 2   U                        1   DGLN    CA     2      0   44
+ 3   U                        1   DGLN    O      3   $neg   32
+ 4   U                        1   DGLN    N      4   $pos    0
+ 5   P5                       1   DGLN    SC1    5      0            
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ bonds ]
+  CA    SC1    1       0.345    8000 {"group": "DGLN"}
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        105.0       60 {"group": "DGLN",  "edge":false}  
+ SC1  CA   O      10        115.0       15 {"group": "DGLN",  "edge":false} 
+
+[ dihedrals ]
+ SC1 CA  N  C       2   145.0  60  {"group": "DGLN",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DGLN",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DGLN",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DGLN",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+
+;;;;;;;;;;;;;;;;;;
+;;; D-Cysteine ;;;
+;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DCYS                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DCYS    C      1      0    0
+ 2   U                        1   DCYS    CA     2      0   44
+ 3   U                        1   DCYS    O      3   $neg   32
+ 4   U                        1   DCYS    N      4   $pos    0
+ 5   SC6                      1   DCYS    SC1    5      0            
+
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.20   10000  {"group": "DCYS"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        107.5      100 {"group": "DCYS",  "edge":false}  
+ SC1  CA   O      10        105.0       30 {"group": "DCYS",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   129.0  75   {"group": "DCYS",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DCYS",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DCYS",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DCYS",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 
+ N  C SC1 
+ C  SC1
+
+;;;;;;;;;;;;;;;;;;
+;;; D-Arginine ;;; 
+;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DARG                1     
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DARG    C      1      0    0
+ 2   U                        1   DARG    CA     2      0   44
+ 3   U                        1   DARG    O      3   $neg   32
+ 4   U                        1   DARG    N      4   $pos    0
+ 5   TC3                      1   DARG    SC1    5      0            
+ 6   TN1d                     1   DARG    SC2    6      0    
+ 7   TN1dq                    1   DARG    SC3    7    0.5    
+ 8   TN1dq                    1   DARG    SC4    8    0.5    
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C   O 
+
+[ bonds ]
+;  i     j   funct   length
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.20     10000 {"group": "DARG"}
+  SC1   SC2    1       0.250    10000 {"group": "DARG"}
+  
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+  SC2   SC3    1       0.300    {"group": "DARG"}  
+  SC2   SC4    1       0.330    {"group": "DARG"}
+  SC3   SC4    1       0.290    {"group": "DARG"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275    {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        110.0       60    {"group": "DARG",  "edge":false}  
+ SC1  CA   O      10        110.0       45    {"group": "DARG",  "edge":false}  
+ CA   SC1  SC2     2        170.0       75    {"group": "DARG",  "edge":false}    
+ SC1  SC2  SC3     1        125.0       20    {"group": "DARG",  "edge":false}    
+ SC1  SC2  SC4     1        140.0       20    {"group": "DARG",  "edge":false}    
+
+[ dihedrals ]
+ SC1 CA  N  C       2   143.0  75    {"group": "DARG",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DARG",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DARG",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DARG",  "edge":false}
+
+[ exclusions ]
+ O  N  C SC1 SC3 SC4 
+ N  C SC1 SC3 SC4
+ C  SC1
+
+
+;;;;;;;;;;;;;;;;;;;
+;;; D-Histidine ;;;
+;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DHIS                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DHIS    C      1      0    0
+ 2   U                        1   DHIS    CA     2      0   44
+ 3   U                        1   DHIS    O      3   $neg   32
+ 4   U                        1   DHIS    N      4   $pos    0
+ 5   TC4                      1   DHIS    SC1    5      0            
+ 6   TN6d                     1   DHIS    SC2    6      0    
+ 7   TN5a                     1   DHIS    SC3    7      0    
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O    1       0.238  {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+ SC1   SC2    1       0.320  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ SC1   SC3    1       0.300  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ SC2   SC3    1       0.270  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ 
+[ bonds ]
+;  i     j   funct   length
+ CA     O     1       0.238  $stiff_fc  {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+ CA    SC1    1       0.198  10000      {"group": "DHIS"}
+ SC1   SC2    1       0.320  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+ SC1   SC3    1       0.300  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+ SC2   SC3    1       0.270  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+  
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        110.0       60 {"group": "DHIS",  "edge":false} 
+ SC1  CA   O      10        110.0       45 {"group": "DHIS",  "edge":false}  
+ CA   SC1  SC2    10        130.0       30 {"group": "DHIS",  "edge":false}
+ CA   SC1  SC3     2        130.0       30 {"group": "DHIS",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   142.5  75    {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DHIS",  "edge":false}
+ O   CA  SC1 SC2    9   -90    2.5 3 {"group": "DHIS",  "edge":false}
+ O   CA  SC1 SC2    9   -100    2  1 {"group": "DHIS",  "edge":false}
+
+[ exclusions ]
+O  N  C  SC1 SC2 SC3
+N  C  SC1  
+C  SC1
+
+
+
+[ moleculetype ]
+; molname       nrexcl
+DHSE                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DHSE    C      1      0    0.0
+ 2   U                        1   DHSE    CA     2      0   44.0
+ 3   U                        1   DHSE    O      3   $neg   32.0
+ 4   U                        1   DHSE    N      4   $pos    0.0
+ 5   TC4                      1   DHSE    SC1    5      0            
+ 6   TN6d                     1   DHSE    SC2    6      0    
+ 7   TN5a                     1   DHSE    SC3    7      0   
+
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O    1       0.238  {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+ SC1   SC2    1       0.320  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ SC1   SC3    1       0.300  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ SC2   SC3    1       0.270  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ 
+[ bonds ]
+;  i     j   funct   length
+ CA     O     1       0.238  $stiff_fc  {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+ CA    SC1    1       0.198  10000      {"group": "DHIS"}
+ SC1   SC2    1       0.320  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+ SC1   SC3    1       0.300  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+ SC2   SC3    1       0.270  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+  
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        110.0       60 {"group": "DHIS",  "edge":false} 
+ SC1  CA   O      10        110.0       45 {"group": "DHIS",  "edge":false}  
+ CA   SC1  SC2    10        130.0       30 {"group": "DHIS",  "edge":false}
+ CA   SC1  SC3     2        130.0       30 {"group": "DHIS",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   142.5  75    {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DHIS",  "edge":false}
+ O   CA  SC1 SC2    9   -90    2.5 3 {"group": "DHIS",  "edge":false}
+ O   CA  SC1 SC2    9   -100    2  1 {"group": "DHIS",  "edge":false}
+
+[ exclusions ]
+O  N  C  SC1 SC2 SC3
+N  C  SC1  
+C  SC1
+
+
+[ moleculetype ]
+; molname       nrexcl
+DHSD                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DHSD    C      1      0    0
+ 2   U                        1   DHSD    CA     2      0   44
+ 3   U                        1   DHSD    O      3   $neg   32
+ 4   U                        1   DHSD    N      4   $pos    0
+ 5   TC4                      1   DHSD    SC1    5      0            
+ 6   TN5a                     1   DHSD    SC2    6      0    
+ 7   TN6d                     1   DHSD    SC3    7      0    
+
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O    1       0.238  {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+ SC1   SC2    1       0.300  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ SC1   SC3    1       0.320  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ SC2   SC3    1       0.270  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ 
+[ bonds ]
+;  i     j   funct   length
+ CA     O     1       0.238  $stiff_fc  {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+ CA    SC1    1       0.198  10000      {"group": "DHIS"}
+ SC1   SC2    1       0.300  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+ SC1   SC3    1       0.320  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+ SC2   SC3    1       0.270  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+  
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        110.0       60 {"group": "DHIS",  "edge":false} 
+ SC1  CA   O      10        110.0       45 {"group": "DHIS",  "edge":false}  
+ CA   SC1  SC2    10        130.0       30 {"group": "DHIS",  "edge":false}
+ CA   SC1  SC3     2        130.0       30 {"group": "DHIS",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   142.5  75    {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DHIS",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DHIS",  "edge":false}
+ O   CA  SC1 SC2    9   -90    2.5 3 {"group": "DHIS",  "edge":false}
+ O   CA  SC1 SC2    9   -100    2  1 {"group": "DHIS",  "edge":false}
+
+[ exclusions ]
+O  N  C  SC1 SC2 SC3
+N  C  SC1  
+C  SC1
+
+
+[ moleculetype ]
+; molname       nrexcl
+DHSP                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DHSP    C      1      0    0
+ 2   U                        1   DHSP    CA     2      0   44
+ 3   U                        1   DHSP    O      3   $neg   32
+ 4   U                        1   DHSP    N      4   $pos    0
+ 5   TC4                      1   DHSP    SC1    5      0            
+ 6   TP1dq                    1   DHSP    SC2    6    0.5    
+ 7   TP1dq                    1   DHSP    SC3    7    0.5    
+
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O    1       0.238  {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+ SC1   SC2    1       0.320  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ SC1   SC3    1       0.320  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ SC2   SC3    1       0.270  {"group": "DHIS", "ifndef": "FLEXIBLE"}
+ 
+[ bonds ]
+;  i     j   funct   length
+ CA     O     1       0.238  $stiff_fc  {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+ CA    SC1    1       0.198  10000      {"group": "DHIS"}
+ SC1   SC2    1       0.320  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+ SC1   SC3    1       0.320  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+ SC2   SC3    1       0.270  $stiff_fc  {"group": "DHIS", "ifdef": "FLEXIBLE"}
+  
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275 {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        110.0       60 {"group": "DHIS",  "edge":false} 
+ SC1  CA   O      10        110.0       45 {"group": "DHIS",  "edge":false}  
+ CA   SC1  SC2    10        130.0       30 {"group": "DHIS",  "edge":false}
+ CA   SC1  SC3     2        130.0       30 {"group": "DHIS",  "edge":false}  
+
+[ dihedrals ]
+ SC1 CA  N  C       2   142.5  75    {"group": "HIS",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "HIS",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "HIS",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "HIS",  "edge":false}
+ O   CA  SC1 SC2    9   -90    2.5 3 {"group": "HIS",  "edge":false}
+ O   CA  SC1 SC2    9   -100    2  1 {"group": "HIS",  "edge":false}
+
+[ exclusions ]
+O  N  C  SC1 SC2 SC3
+N  C  SC1  
+C  SC1
+
+
+;;;;;;;;;;;;;;;;
+;;; D-Lysine ;;;
+;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DLYS                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DLYS    C      1      0    0
+ 2   U                        1   DLYS    CA     2      0   44
+ 3   U                        1   DLYS    O      3   $neg   32
+ 4   U                        1   DLYS    N      4   $pos    0
+ 5   SC3                      1   DLYS    SC1    5      0            
+ 6   SQ4p                     1   DLYS    SC2    6    1.0    
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+ 
+[ bonds ]
+;  i     j   funct   length
+  CA      O    1       0.238     $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.260    10000 {"group": "DLYS"}
+ SC1    SC2    1       0.340     5500 {"group": "DLYS"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA    C      10        112.5      275  {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N       10        110.0       50  {"group": "DLYS",  "edge":false} 
+ SC1  CA   O       10        115.0       30  {"group": "DLYS",  "edge":false} 
+ CA   SC1  SC2      1        160.0       35  {"group": "DLYS",  "edge":false}
+   
+[ dihedrals ]
+ SC1 CA  N  C       2   145.0  75    {"group": "DLYS",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DLYS",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DLYS",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DLYS",  "edge":false}
+
+[ exclusions ]
+ O  N  C  SC1  SC2
+ N  C  SC1  SC2
+ C  SC1
+
+;;;;;;;;;;;;;;;;;;;
+;;; D-Aspartate ;;;
+;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DASP                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DASP    C      1      0    0
+ 2   U                        1   DASP    CA     2      0   44
+ 3   U                        1   DASP    O      3   $neg   32
+ 4   U                        1   DASP    N      4   $pos    0
+ 5   SQ5n                     1   DASP    SC1    5   -1.0            
+
+[ edges ]
+N  CA 
+CA  C 
+CA  O 
+C  O 
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.255   10000     {"group": "DASP"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275  {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        105.5       30  {"group": "DASP",  "edge":false}  
+ SC1  CA   O      10        115.0       10  {"group": "DASP",  "edge":false}  
+ 
+[ dihedrals ]
+ SC1 CA  N  C       2   151.0  70    {"group": "DASP",  "edge":false}
+ SC1 CA  O  C       9    10.0   2  2 {"group": "DASP",  "edge":false}
+ SC1 CA  O  C       9    10.0   2  1 {"group": "DASP",  "edge":false}
+ SC1 CA  O  C       9   100.0   .5  1 {"group": "DASP",  "edge":false}
+
+[ exclusions ]
+O  N  C  SC1  
+N  C  SC1  
+C  SC1
+
+
+;;;;;;;;;;;;;;;;;;;
+;;; D-Glutamate ;;;
+;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DGLU                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_default_bb_type    1   DGLU    C      1      0    0
+ 2   U                        1   DGLU    CA     2      0   44
+ 3   U                        1   DGLU    O      3   $neg   32
+ 4   U                        1   DGLU    N      4   $pos    0
+ 5   Q5n                      1   DGLU    SC1    5   -1.0            
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ bonds ]
+ CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+ CA    SC1    1       0.335   10000 {"group": "DGLU"}
+
+[ constraints ]
+;  i     j   funct   length
+ CA     O     1       0.238    {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275  {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N      10        100.0       40  {"group": "DGLU",  "edge":false}  
+ SC1  CA   O      10        120.0       20  {"group": "DGLU",  "edge":false}  
+   
+[ dihedrals ]
+ SC1 CA  N  C       2   145.0  50    {"group": "DGLU",  "edge":false}
+ SC1 CA  O  C       9    10.0   4  2 {"group": "DGLU",  "edge":false}
+ SC1 CA  O  C       9    10.0   5  1 {"group": "DGLU",  "edge":false}
+ SC1 CA  O  C       9   100.0   1  1 {"group": "DGLU",  "edge":false}
+
+[ exclusions ]
+ O  N  C  SC1 
+ N  C  SC1  
+ C  SC1
+
+;;;;;;;;;;;;;;;;;
+;;; D-Proline ;;;
+;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DPRO                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_PRO_bb_type        1   DPRO    C      1   $pos    0
+ 2   U                        1   DPRO    CA     2      0   44
+ 3   U                        1   DPRO    O      3   $neg   32
+ 4   U                        1   DPRO    N      4      0    0
+ 5   SC3                      1   DPRO    SC1    5      0           
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.19   15000      {"group": "DPRO"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238   {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+  
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275  {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N       1         65.0      300  {"group": "DPRO",  "edge":false}  
+ SC1  CA   O      10        110.0       20  {"group": "DPRO",  "edge":false}  
+ 
+[ dihedrals ]
+ SC1 CA  N  C       2   125.0   75     {"group": "DPRO",  "edge":false}
+ SC1 CA  O  C       1    30.0   10  1  {"group": "DPRO",  "edge":false}
+
+[ exclusions ]
+ O  N  C  SC1  
+ N  C  SC1  
+ C  SC1
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+;;; D-Hydroxyproline ;;;
+;;;;;;;;;;;;;;;;;;;;;;;;
+
+[ moleculetype ]
+; molname       nrexcl
+DHYP                1
+
+[ atoms ]
+;id type resnr residu atom cgnr   charge mass
+ 1   $prot_PRO_bb_type        1   DHYP    C      1   $pos    0
+ 2   U                        1   DHYP    CA     2      0   44
+ 3   U                        1   DHYP    O      3   $neg   32
+ 4   U                        1   DHYP    N      4      0    0
+ 5   SP1                      1   DHYP    SC1    5      0           
+
+[ edges ]
+ N  CA 
+ CA  C 
+ CA  O 
+ C  O 
+
+[ bonds ]
+  CA     O     1       0.238   $stiff_fc {"group": "CA  — O ", "ifdef": "FLEXIBLE"}
+  CA    SC1    1       0.210   15000     {"group": "DHYP"}
+
+[ constraints ]
+;  i     j   funct   length
+  CA     O     1       0.238   {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+  
+[ angles ] 
+; i    j   k     funct    ref.angle   force_k
+ N    CA   C      10        112.5      275  {"group": "N  — CA  — C ",  "edge":false } 
+ SC1  CA   N       1         65.0      300  {"group": "DHYP",  "edge":false}  
+ SC1  CA   O      10        110.0       20  {"group": "DHYP",  "edge":false}  
+ 
+[ dihedrals ]
+ SC1 CA  N  C       2   125.0   75     {"group": "DHYP",  "edge":false}
+ SC1 CA  O  C       1    30.0   10  1  {"group": "DHYP",  "edge":false}
+
+[ exclusions ]
+ O  N  C  SC1  
+ N  C  SC1  
+ C  SC1

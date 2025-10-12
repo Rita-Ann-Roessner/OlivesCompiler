@@ -1,0 +1,268 @@
+[ macros ]
+protein_resnames "GLY|ALA|CYS|VAL|LEU|ILE|MET|PRO|HYP|ASN|GLN|ASP|ASP0|GLU|GLU0|THR|SER|LYS|LYS0|ARG|ARG0|HIS|HISH|HSE|HSD|HSP|PHE|TYR|TRP|DGLY|DALA|DCYS|DVAL|DLEU|DILE|DMET|DPRO|DHYP|DASN|DGLN|DASP|DASP0|DGLU|DGLU0|DTHR|DSER|DLYS|DLYS0|DARG|DARG0|DHIS|DHISH|DHSE|DHSD|DHSP|DPHE|DTYR|DTRP"
+l_amino_resnames "GLY|ALA|CYS|VAL|LEU|ILE|MET|PRO|HYP|ASN|GLN|ASP|ASP0|GLU|GLU0|THR|SER|LYS|LYS0|ARG|ARG0|HIS|HISH|HSE|HSD|HSP|PHE|TYR|TRP"
+d_amino_resnames "DGLY|DALA|DCYS|DVAL|DLEU|DILE|DMET|DPRO|DHYP|DASN|DGLN|DASP|DASP0|DGLU|DGLU0|DTHR|DSER|DLYS|DLYS0|DARG|ARG0|DHIS|DHISH|DHSE|DHSD|DHSP|DPHE|DTYR|DTRP"
+
+protein_resnames_pro "PRO|HYP"
+d_protein_resnames_pro "DPRO|DHYP"
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; PHI and PSI dihedrals ;;;;
+;;;; D - AMINO ACIDS       ;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;
+;;;; STANDARD ;;;;
+;;;;;;;;;;;;;;;;;;
+
+;These dihedrals represent an unbiased mix of all secondary structures.
+;They are applied by default but should only be used with tertiary structure
+;biases such as OLIVES. (Wishlist: Introduce general dihedrals for GLY & PRO)
+
+;; D-amino acids ;;
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+-C  N  CA  C   9 -100.  5.5  1 {"edge":false, "group": "PHI dihedrals (Default)"}
+-C  N  CA  C   9    0.  4.5  2 {"edge":false, "group": "PHI dihedrals (Default)", "version":1}
+-C  N  CA  C   9  -20.  2.   3 {"edge":false, "group": "PHI dihedrals (Default)", "version":2}
+-C  N  CA  C   9    0.  3.   1 {"edge":false, "group": "PHI dihedrals (Default)", "version":3}
+[ edges ]
+-C  N 
+N  CA 
+CA  C 
+[ patterns ]
+-C  N  CA  C {"resname": $d_amino_resnames} 
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+N  CA  C  +N   9 -110. 5.25   2 {"edge":false, "group": "PSI dihedrals (Default)"}
+N  CA  C  +N   9  120. 3.25   1 {"edge":false, "group": "PSI dihedrals (Default)", "version":1}
+N  CA  C  +N   9  -75. 1.00   3 {"edge":false, "group": "PSI dihedrals (Default)", "version":2}
+N  CA  C  +N   9    0. 0.     1 {"edge":false, "group": "PSI dihedrals (Default)", "version":3}
+[ edges ]
+N  CA 
+CA  C 
+C  +N 
+[ patterns ]
+N  CA  C  {"resname": $d_amino_resnames} +N
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Secondary structure specific ;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;These dihedrals are biased towards specific secondary structures.
+;They are applied when calling -dssp or -ss. They are currently the standard
+;when not using tertiary bias, when using ENs and Go models.
+
+;;;;;;;;;;;;;;
+;;;; COIL ;;;;
+;;;;;;;;;;;;;;
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+-C  N  CA  C   9 -80.  5     1 {"edge":false, "group": "PHI dihedrals (Coil)"}
+-C  N  CA  C   9  10.  6.25  2 {"edge":false, "group": "PHI dihedrals (Coil)", "version":1}
+-C  N  CA  C   9   5.  3.125 3 {"edge":false, "group": "PHI dihedrals (Coil)", "version":2}
+-C  N  CA  C   9   0.  0     1 {"edge":false, "group": "PHI dihedrals (Coil)", "version":3}
+[ edges ]
+-C  N 
+N  CA 
+CA  C 
+[ patterns ]
+-C  N  CA  C {"cgsecstruct": "C","resname": $d_amino_resnames} 
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+N  CA  C  +N   9 -130. 6.25   2 {"edge":false, "group": "PSI dihedrals (Coil)"}
+N  CA  C  +N   9  100. 3.75   1 {"edge":false, "group": "PSI dihedrals (Coil)", "version":1}
+N  CA  C  +N   9   20. 1.25   1 {"edge":false, "group": "PSI dihedrals (Coil)", "version":2}
+N  CA  C  +N   9    0. 0   1 {"edge":false, "group": "PSI dihedrals (Coil)", "version":3}
+[ edges ]
+N  CA 
+CA  C 
+C  +N 
+[ patterns ]
+N  CA  C  {"cgsecstruct": "C","resname": $d_amino_resnames} +N
+
+;;;;Coil for PRO
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+-C  N  CA  C   9 -110. 15  1 {"edge":false, "group": "PHI dihedrals (Coil)"}
+-C  N  CA  C   9  10.  3.75   2 {"edge":false, "group": "PHI dihedrals (Coil)", "version":1}
+-C  N  CA  C   9  -5.  4.375 3 {"edge":false, "group": "PHI dihedrals (Coil)", "version":2}
+-C  N  CA  C   9   0.  0   1 {"edge":false, "group": "PHI dihedrals (Coil)", "version":3}
+[ edges ]
+-C  N 
+N  CA 
+CA  C 
+[ patterns ]
+-C  N  CA  C {"cgsecstruct": "C", "resname": $d_protein_resnames_pro}
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+N  CA  C  +N   9 -125. 6.875   2 {"edge":false, "group": "PSI dihedrals (Coil)"}
+N  CA  C  +N   9  100. 3.125   1 {"edge":false, "group": "PSI dihedrals (Coil)", "version":1}
+N  CA  C  +N   9   20. 3.125   1 {"edge":false, "group": "PSI dihedrals (Coil)", "version":2}
+N  CA  C  +N   9    0.   0   1 {"edge":false, "group": "PSI dihedrals (Coil)", "version":3}
+[ edges ]
+N  CA 
+CA  C 
+C  +N 
+[ patterns ]
+N  CA  C  {"cgsecstruct": "C", "resname": $d_protein_resnames_pro} +N
+
+
+;;;;Coil for GLY
+;; Defined in regular L aminos.
+
+;;;;;;;;;;;;;;;
+;;;; ALPHA ;;;;
+;;;;;;;;;;;;;;;
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+-C  N  CA  C   9 -100 11.25    1 {"edge":false, "group": "PHI dihedrals (Alpha)"}
+-C  N  CA  C   9  -12  7.5     2 {"edge":false, "group": "PHI dihedrals (Alpha)", "version":1}
+-C  N  CA  C   9  -15  5.9375  3 {"edge":false, "group": "PHI dihedrals (Alpha)", "version":2}
+-C  N  CA  C   9 -180  3.75    1 {"edge":false, "group": "PHI dihedrals (Alpha)", "version":3}
+[ edges ]
+-C  N 
+N  CA 
+CA  C 
+[ patterns ]
+-C  N  CA  C {"cgsecstruct": "H|1|2|3","resname": $d_amino_resnames}
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+N  CA  C  +N   9 -160   12.5    1 {"edge":false, "group": "PSI dihedrals (Alpha)"}
+N  CA  C  +N   9  -40    6.25   3 {"edge":false, "group": "PSI dihedrals (Alpha)", "version":1}
+N  CA  C  +N   9 -120    6.25   2 {"edge":false, "group": "PSI dihedrals (Alpha)", "version":2}
+N  CA  C  +N   9 -180    1.25   1 {"edge":false, "group": "PSI dihedrals (Alpha)", "version":3}
+[ edges ]
+N  CA 
+CA  C 
+C  +N 
+[ patterns ]
+N  CA  C  {"cgsecstruct": "H|1|2|3","resname": $d_amino_resnames} +N
+
+;;;;ALPHA for PRO
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+N  CA  C  +N   9 -115    8.75   2 {"edge":false, "group": "PSI dihedrals (Alpha)"}
+N  CA  C  +N   9 -140    3.75   1 {"edge":false, "group": "PSI dihedrals (Alpha)", "version":1}
+N  CA  C  +N   9  120    6.25   1 {"edge":false, "group": "PSI dihedrals (Alpha)", "version":2}
+N  CA  C  +N   9    0    0      1 {"edge":false, "group": "PSI dihedrals (Alpha)", "version":3}
+[ edges ]
+N  CA 
+CA  C 
+C  +N 
+[ patterns ]
+N  CA  C  {"cgsecstruct": "H|1|2|3", "resname": $d_protein_resnames_pro} +N
+
+
+;;;;;;;;;;;;;;
+;;;; BETA ;;;;
+;;;;;;;;;;;;;;
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+-C  N  CA  C   9 -50. 25 1 {"edge":false, "group": "PHI dihedrals (Beta)"}
+-C  N  CA  C   9   0.  0 1 {"edge":false, "group": "PHI dihedrals (Beta)", "version":1}
+-C  N  CA  C   9   0.  0 1 {"edge":false, "group": "PHI dihedrals (Beta)", "version":2}
+-C  N  CA  C   9   0.  0 1 {"edge":false, "group": "PHI dihedrals (Beta)", "version":3}
+[ edges ]
+-C  N 
+N  CA 
+CA  C 
+[ patterns ]
+-C  N  CA  C {"cgsecstruct": "E","resname": $d_amino_resnames}
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+N  CA  C  +N   9  50. 40 1 {"edge":false, "group": "PSI dihedrals (Beta)"}
+N  CA  C  +N   9   0.  0 1 {"edge":false, "group": "PSI dihedrals (Beta)", "version":1}
+N  CA  C  +N   9   0.  0 1 {"edge":false, "group": "PSI dihedrals (Beta)", "version":2}
+N  CA  C  +N   9   0.  0 1 {"edge":false, "group": "PSI dihedrals (Beta)", "version":3}
+[ edges ]
+N  CA 
+CA  C 
+C  +N 
+[ patterns ]
+N  CA  C  {"cgsecstruct": "E","resname": $d_amino_resnames} +N 
+
+;;;;;;;;;;;;;;
+;;;; BEND ;;;;
+;;;;;;;;;;;;;;
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+-C  N  CA  C   9 -80.  5 1 {"edge":false, "group": "PHI dihedrals (Bend)"}
+-C  N  CA  C   9  10.  3 2 {"edge":false, "group": "PHI dihedrals (Bend)", "version":1}
+-C  N  CA  C   9   5.  2 3 {"edge":false, "group": "PHI dihedrals (Bend)", "version":2}
+-C  N  CA  C   9   0.  0 1 {"edge":false, "group": "PHI dihedrals (Bend)", "version":3}
+[ edges ]
+-C  N 
+N  CA 
+CA  C 
+[ patterns ]
+-C  N  CA  C {"cgsecstruct": "S","resname": $d_amino_resnames}
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+N  CA  C  +N   9 -125. 3.5 2 {"edge":false, "group": "PSI dihedrals (Bend)"}
+N  CA  C  +N   9  115. 2.0 1 {"edge":false, "group": "PSI dihedrals (Bend)", "version":1}
+N  CA  C  +N   9    0.   0 1 {"edge":false, "group": "PSI dihedrals (Bend)", "version":2}
+N  CA  C  +N   9    0.   0 1 {"edge":false, "group": "PSI dihedrals (Bend)", "version":3}
+[ edges ]
+N  CA 
+CA  C 
+C  +N 
+[ patterns ]
+N  CA  C  {"cgsecstruct": "S","resname": $d_amino_resnames} +N 
+
+;;;;;;;;;;;;;;
+;;;; TURN ;;;;
+;;;;;;;;;;;;;;
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+-C  N  CA  C   9 -100.  5 1 {"edge":false, "group": "PHI dihedrals (Turn)"}
+-C  N  CA  C   9   10.  6 2 {"edge":false, "group": "PHI dihedrals (Turn)", "version":1}
+-C  N  CA  C   9    5.  2 3 {"edge":false, "group": "PHI dihedrals (Turn)", "version":2}
+-C  N  CA  C   9    0.  0 1 {"edge":false, "group": "PHI dihedrals (Turn)", "version":3}
+[ edges ]
+-C  N 
+N  CA 
+CA  C 
+[ patterns ]
+-C  N  CA  C {"cgsecstruct": "T","resname": $d_amino_resnames}
+
+[ link ]
+resname $protein_resnames
+[ dihedrals ]
+N  CA  C  +N   9 -145. 3.5 2  {"edge":false, "group": "PSI dihedrals (Turn)"}
+N  CA  C  +N   9  160. 5.0 1  {"edge":false, "group": "PSI dihedrals (Turn)", "version":1}
+N  CA  C  +N   9    0.   0 1  {"edge":false, "group": "PSI dihedrals (Turn)", "version":2}
+N  CA  C  +N   9    0.   0 1  {"edge":false, "group": "PSI dihedrals (Turn)", "version":3}
+[ edges ]
+N  CA 
+CA  C 
+C  +N 
+[ patterns ]
+N  CA  C  {"cgsecstruct": "T","resname": $d_amino_resnames} +N

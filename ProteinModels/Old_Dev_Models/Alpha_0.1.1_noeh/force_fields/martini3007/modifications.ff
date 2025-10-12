@@ -1,0 +1,140 @@
+[ modification ]
+C-ter
+[ atoms ]
+C  {"replace": {"atype": "U", "mass": "0.0", "charge": 0.0}}  
+O  {"replace": {"atype": "SQ5n", "mass": "32.0", "charge": -1.0}}
+[ constraints ]
+CA     O     1       0.143   {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+[ edges ]
+CA  C 
+CA  O 
+[ virtual_sitesn ]
+C  O  -- 2 {"edge": false, "group": "C  Virtual site C-TERM"}
+;[ exclusions ]
+;C  -C  -O  -N 
+;[ angles ]
+;O  CA  -CA  1 100.0 200 {"edge": false, "group": "O -CA --CA  C-term"} ;notworking
+
+[ modification ]
+N-ter
+[ atoms ]
+N  {"replace": {"atype": "TQ5p", "charge": 1.0, "mass": "32.0"}}
+C  {"replace": {"charge": 0.0}} ;We keep it the same 
+[ constraints ]                           
+CA    N    1    0.170 {"edge": false, "group": "CA  N  N-term"} 
+[ edges ]
+CA  C 
+CA  N 
+
+
+
+[ modification ]
+COOH-ter
+[ atoms ]
+C  {"replace": {"atype": "U", "mass": "0.0", "charge": 0.0}}  
+O  {"replace": {"atype": "SP2", "mass": "32.0", "charge": 0.0}}
+[ constraints ]
+CA     O     1       0.177   {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+[ edges ]
+CA  C 
+CA  O 
+[ virtual_sitesn ]
+C  O  -- 2 {"edge": false, "group": "C  Virtual site C-TERM"}
+
+
+[ modification ]
+CT1-ter
+[ atoms ]
+C  {"replace": {"atype": "U", "mass": "0.0", "charge": 0.0}}  
+O  {"replace": {"atype": "SN4a", "mass": "32.0", "charge": 0.0}}  ;could be N4a instead.
+[ constraints ]
+CA     O     1       0.300   {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+[ edges ]
+CA  C 
+CA  O 
+[ virtual_sitesn ]
+C  O  -- 2 {"edge": false, "group": "C  Virtual site C-TERM"}
+
+
+[ modification ]
+CT2-ter
+[ atoms ]
+C  {"replace": {"atype": "U", "mass": "0.0", "charge": 0.0}}  
+O  {"replace": {"atype": "SP5", "mass": "32.0", "charge": 0.0}}  
+[ constraints ]
+CA     O     1       0.220   {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+[ edges ]
+CA  C 
+CA  O 
+[ virtual_sitesn ]
+C  O  -- 2 {"edge": false, "group": "C  Virtual site C-TERM"}
+
+
+
+[ modification ]
+CT3-ter
+[ atoms ]
+C  {"replace": {"atype": "U", "mass": "0.0", "charge": 0.0}}  
+O  {"replace": {"atype": "SP3", "mass": "32.0", "charge": 0.0}}  
+[ constraints ]
+CA     O     1       0.300   {"group": "CA  — O ", "ifndef": "FLEXIBLE"}
+[ edges ]
+CA  C 
+CA  O 
+[ virtual_sitesn ]
+C  O  -- 2 {"edge": false, "group": "C  Virtual site C-TERM"}
+
+
+[ modification ]
+NH2-ter
+[ atoms ]
+N  {"replace": {"atype": "TN6d", "charge": 0.0, "mass": "32.0"}}
+C  {"replace": {"charge": 0.0}} ;We keep it the same 
+[ constraints ]                           
+CA    N    1    0.173 {"edge": false, "group": "CA  N  N-term"} 
+[ edges ]
+CA  C 
+CA  N 
+
+
+[ modification ]
+NACE-ter
+[ atoms ]
+N  {"replace": {"atype": "SP3", "charge": 0.0, "mass": "32.0"}} ;Could be P2 or something
+C  {"replace": {"charge": 0.0}} ;We keep it the same 
+[ constraints ]                           
+CA    N    1    0.295 {"edge": false, "group": "CA  N  N-term (NACE)"} 
+[ edges ]
+CA  C 
+CA  N 
+
+
+[ modification ]
+GLU-HE1
+[ atoms ]
+SC1 {"replace": {"atype": "P2", "charge": 0}}
+
+[ modification ]
+GLU-HE2
+[ atoms ]
+SC1 {"replace": {"atype": "P2", "charge": 0}}
+
+[ modification ]
+ASP-HD1
+[ atoms ]
+SC1 {"replace": {"atype": "P2", "charge": 0}}
+
+[ modification ]
+ASP-HD2
+[ atoms ]
+SC1 {"replace": {"atype": "P2", "charge": 0}}
+
+[ modification ]
+LYS-LSN
+[ atoms ]
+SC2 {"resname": "LYS", "replace": {"atype": "SN6d", "charge": 0}}
+
+[ modification ]
+LYS-HZ3
+[ atoms ]
+SC2 {"replace": {"resname": "LYS"}}
