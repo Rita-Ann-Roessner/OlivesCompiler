@@ -3,7 +3,7 @@ title                    = Martini
 refcoord_scaling         = com
 integrator               = md
 dt                       = 0.01 
-nsteps                   = 1000000
+nsteps                   = 100000;1000000
 nstcomm                  = 100
 comm-grps		 = 
 

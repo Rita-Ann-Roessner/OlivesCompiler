@@ -4,5 +4,8 @@
     "ts_scaling": true,
     "ts_cutoff": true,
     "unique_pair_scaling": true,
-    "simulation_replica":2
+    "simulation_replica":2,
+    "n_particles":2,
+    "n_iters":3,
+    "start_iter":2
 }   

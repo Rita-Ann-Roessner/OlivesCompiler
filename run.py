@@ -14,10 +14,12 @@ import os
 import glob
 import shutil
 import json
+import time
 from pathlib import Path
 import re
 
 import numpy as np
+import pandas as pd
 import MDAnalysis as mda
 from scipy.stats import entropy
 
@@ -43,25 +45,6 @@ def get_args() -> Args:
     args = parser.parse_args()
 
     return Args(args.settings)
-# --------------------------------------------------
-
-
-# --------------------------------------------------
-def create_csv(csv_file):
-    """ Create csv for insertion of data. """
-
-    if not os.path.exists(csv_file):
-        df = pd.DataFrame(columns=["Design", "Sequence", "RMSD_1", "RMSD_2", "RMSD_avg", "Binding"])
-        df.to_csv(csv_file, index=False)
-# --------------------------------------------------
-
-
-# --------------------------------------------------
-def insert_data(csv_file, data_array):
-    """ Insert row of statistics into csv """
-
-    df = pd.DataFrame([data_array])
-    df.to_csv(csv_file, mode='a', header=False, index=False)
 # --------------------------------------------------
 
 
@@ -394,8 +377,86 @@ def compute_loss(iteration, settings):
 
 
 # --------------------------------------------------
+def objective(tag, x, settings, states):
+    """x = [ts_scaling, ts_cutoff, u0, u1] -> loss (float)"""
+    itdir = f"output/PSO_{tag}"
+    if os.path.isdir(itdir): shutil.rmtree(itdir)
+    os.makedirs(itdir, exist_ok=True)
+
+    setup_cg_system(itdir)
+
+    ts_scaling = float(x[0])
+    ts_cutoff  = float(x[1])
+    unique_pair_scaling = f"{float(x[2])},{float(x[3])}"
+    states_str = ",".join(states)
+
+    add_OLIVES(states_str, itdir, ts_scaling=ts_scaling,
+               ts_cutoff=ts_cutoff, unique_pair_scaling=unique_pair_scaling)
+
+    minimize(itdir)
+    equilibrate(itdir, settings)
+    simulate(itdir, settings)
+    process(itdir, settings)
+
+    return float(compute_loss(itdir, settings))
+# --------------------------------------------------
+
+
+# --------------------------------------------------
+def pso_init(bounds, n_particles, w=0.6, c1=1.5, c2=1.5, seed=None):
+    """ Initialize positions for particle swarm. """
+
+    keys = list(bounds.keys())
+    lb = np.array([bounds[k][0] for k in keys], float)
+    ub = np.array([bounds[k][1] for k in keys], float)
+    rng = np.random.default_rng(seed)
+
+    X = lb + (ub - lb) * rng.random((n_particles, len(keys))) # initial position
+    V = np.zeros_like(X)
+    P = X.copy()       # personal best positions
+    Pf = np.full(n_particles, np.inf)  # personal best fitness
+    g = X[0].copy()    # global best position
+    gf = np.inf        # global best fitness
+    vmax = 0.2 * (ub - lb)
+
+    return {"keys": keys, "X": X, "V": V, "P": P, "Pf": Pf,
+            "g": g, "gf": gf, "lb": lb, "ub": ub,
+            "vmax": vmax, "w": w, "c1": c1, "c2": c2, "rng": rng}
+# --------------------------------------------------
+
+
+# --------------------------------------------------
+def pso_step(state, fitness):
+    """ Update positions for particle swarm. """
+
+    # Update personal bests
+    better = fitness < state["Pf"]
+    state["P"][better] = state["X"][better]
+    state["Pf"][better] = fitness[better]
+
+    # Update global best
+    gi = np.argmin(state["Pf"])
+    if state["Pf"][gi] < state["gf"]:
+        state["gf"] = state["Pf"][gi]
+        state["g"] = state["P"][gi].copy()
+
+    # Update velocities
+    r1 = state["rng"].random(state["X"].shape)
+    r2 = state["rng"].random(state["X"].shape)
+    state["V"] = (state["w"] * state["V"]
+                  + state["c1"] * r1 * (state["P"] - state["X"])
+                  + state["c2"] * r2 * (state["g"] - state["X"]))
+
+    state["V"] = np.clip(state["V"], -state["vmax"], state["vmax"])
+    state["X"] = np.clip(state["X"] + state["V"], state["lb"], state["ub"])
+    
+    return state
+# --------------------------------------------------
+
+
+# --------------------------------------------------
 def main() -> None:
-    """ Make a jazz noise here """
+    """ Particle Swarm Optimization. """
 
     args = get_args()
     
@@ -403,64 +464,71 @@ def main() -> None:
     with open(args.settings, 'r') as file:
         settings = json.load(file)
 
-    # csv for final results
-    #final_csv = os.path.join(md_dir, 'final_md_stats.csv')
-    #create_csv(final_csv)
-    
-    # output directory
-    os.makedirs("output", exist_ok=True)
+    n_particles = settings["n_particles"]
+    n_iters = settings["n_iters"]
+    start_iter = settings["start_iter"]
+    results_csv = "pso_history.csv"
 
-    # OLIVES states
-    states = []
-    for state in settings["states"]:
-        model_aa = state
-        model_cg = f"{state.split('.')[0]}_cg.pdb"
-        states.append(model_cg)
+    states = [f"{s.split('.')[0]}_cg.pdb" for s in settings["states"]]
 
-    # setup CG system
-    iteration = f"output/test"
-    os.makedirs(iteration, exist_ok=True)
-    #setup_cg_system(iteration)
+    bounds = {
+        "ts_scaling": (0.05, 1.0),
+        "ts_cutoff":  (0.2,  1.0),
+        "u0":         (0.0,  2.0),
+        "u1":         (0.0,  2.0),
+    }
 
-    # add OLIVES
-    states_str = ",".join(map(str,states))
-    # tuning parameters (for now random, later based on PSO)
-    if settings["ts_scaling"]: # common contacts
-        ts_scaling = 0.2
+    # Initialize or restart swarm
+    state_file = f"output/pso_state_it{start_iter-1}.npz"
+    if start_iter > 0 and os.path.exists(state_file):
+        data = np.load(state_file)
+        st = {
+            "X": data["X"], "V": data["V"], "P": data["P"], "Pf": data["Pf"],
+            "g": data["g"], "gf": float(data["gf"]),
+            "keys": list(bounds.keys()),
+            "lb": np.array([bounds[k][0] for k in bounds]),
+            "ub": np.array([bounds[k][1] for k in bounds]),
+            "vmax": 0.2 * (np.array([bounds[k][1] for k in bounds]) - np.array([bounds[k][0] for k in bounds])),
+            "w": 0.6, "c1": 1.5, "c2": 1.5,
+            "rng": np.random.default_rng(int(time.time()))
+        }
+        print(f"Restarting from iteration {start_iter}, loaded previous state.")
     else:
-        ts_scaling = False
-    if settings["ts_cutoff"]:
-        ts_cutoff = 0.55
+        st = pso_init(bounds, n_particles, seed=int(time.time()))
+        print("Starting new PSO run.")
+
+    if start_iter > 0 and os.path.exists(results_csv):
+        hist = pd.read_csv(results_csv).to_dict(orient="records")
     else:
-        ts_cutoff = False
-    if settings["unique_pair_scaling"]:
-        ratio = [1,0.2] 
-        ratio = [x/ts_scaling for x in ratio]
-        unique_pair_scaling = ",".join(map(str, ratio))
-    else:
-        unique_pair_scaling = False
+        hist = []
 
-    #add_OLIVES(states_str, iteration, ts_scaling, ts_cutoff, unique_pair_scaling)
-    
-    # minimization
-    #minimize(iteration)
 
-    # equilibration
-    #equilibrate(iteration, settings)
+    for it in range(start_iter, n_iters):
+        fvals = []
+        for p in range(n_particles):
+            x = st["X"][p]
+            tag = f"it{it}_p{p}"
+            f = objective(tag, x, settings, states)
+            fvals.append(f)
+            hist.append({"iter": it, "particle": p, **{k: float(x[i]) for i, k in enumerate(st["keys"])}, "loss": float(f)})
 
-    # production simulation 
-    #simulate(iteration, settings)
+        st = pso_step(st, np.array(fvals, float))
 
-    # compute loss
-    loss = compute_loss(iteration, settings)
-    print(loss)
+        # save PSO state after each iteration
+        np.savez(f"output/pso_state_it{it}.npz",
+                 X=st["X"], V=st["V"], P=st["P"], Pf=st["Pf"],
+                 g=st["g"], gf=st["gf"])
 
-    # process trajectories
-    #process(iteration, settings)
-"""
-        # add to csv
-        insert_data(final_csv, data_array)
-"""
+        # save history
+        pd.DataFrame(hist).to_csv(results_csv, index=False) # overwrites the full dataframe at each time
+
+        print(f"iter {it}: best={st['gf']:.6f} params=" +
+              str({k: float(v) for k, v in zip(st['keys'], st['g'])}))
+
+    best = {k: float(v) for k, v in zip(st["keys"], st["g"])}
+    print("Final best:", best, float(st["gf"]))
+
+
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
