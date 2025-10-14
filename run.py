@@ -23,9 +23,12 @@ import pandas as pd
 import MDAnalysis as mda
 from scipy.stats import entropy
 
+from mpi4py import MPI
+
 class Args(NamedTuple):
     """ Command-line arguments """
     settings: str
+    mdrun_threads: int
 
 
 # --------------------------------------------------
@@ -42,9 +45,15 @@ def get_args() -> Args:
                         type=str, 
                         default='./settings.json')
 
+    parser.add_argument('-n', 
+                        '--mdrun_threads', 
+                        help='Path to the basic settings.json file.',
+                        type=str, 
+                        default='./settings.json')
+
     args = parser.parse_args()
 
-    return Args(args.settings)
+    return Args(args.settings, args.mdrun_threads)
 # --------------------------------------------------
 
 
@@ -154,7 +163,7 @@ def minimize(iteration):
 
     # actual minimization
     cmd = [
-    "gmx", "mdrun", "-deffnm", "minimization"
+    "gmx", "mdrun", "-deffnm", "minimization", "-v"
     ]
 
     run_command(cmd, iteration)
@@ -162,29 +171,7 @@ def minimize(iteration):
 
 
 # --------------------------------------------------
-def run_simulation(cmd1, cmd2, cwd):
-
-    # Run both simulations in parallel
-    proc1 = subprocess.Popen(cmd1, cwd=f'{cwd}/0')
-    proc2 = subprocess.Popen(cmd2, cwd=f'{cwd}/1')
-
-    # Wait for both simulations to finish
-    proc1.wait()
-    proc2.wait()
-
-    # Check if any of the processes failed
-    if proc1.returncode != 0:
-        print("Simulation 1 failed.")
-        sys.exit(proc1.returncode)
-
-    if proc2.returncode != 0:
-        print("Simulation 2 failed.")
-        sys.exit(proc2.returncode)
-# --------------------------------------------------
-
-
-# --------------------------------------------------
-def equilibrate(iteration, settings):
+def equilibrate(iteration, mdrun_threads):
     """ Equilibrate system in NPT ensemble. Position restraints on protein backbone beads. """
 
     # create index
@@ -199,95 +186,78 @@ def equilibrate(iteration, settings):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     params_dir = f'{base_dir}/user/params'
 
-    # setup replicas
-    simulation_replica = settings["simulation_replica"]
-    for i in range(simulation_replica):
-        rep_dir = os.path.join(iteration, str(i))
-        os.makedirs(rep_dir, exist_ok=True)
-
-        # gromacs pre-processor
-        cmd = [
-        "gmx", "grompp",
-        "-f", f"{params_dir}/rel.mdp",
-        "-c", "minimization.gro", "-r", "minimization.gro", "-n", "index.ndx", "-p", "system.top", # system coordinates, coordinates for position restraints, index and topology
-        "-o", f"{i}/relax.tpr", "-maxwarn", "1" # ignore warning of pressure coupling compined with position restraints
-        ]
-        
-        run_command(cmd, iteration)
+    # gromacs pre-processor
+    cmd = [
+    "gmx", "grompp",
+    "-f", f"{params_dir}/rel.mdp",
+    "-c", "minimization.gro", "-r", "minimization.gro", "-n", "index.ndx", "-p", "system.top", # system coordinates, coordinates for position restraints, index and topology
+    "-o", "relax.tpr", "-maxwarn", "1" # ignore warning of pressure coupling compined with position restraints
+    ]
+    
+    run_command(cmd, iteration)
 
     # actual simulations
-    cmd1 = ["gmx", "mdrun", "-deffnm", "relax", "-v", "-ntomp", "10", "-gpu_id", "0", "-pin", "on", "-ntmpi", "1"]
-    cmd2 = ["gmx", "mdrun", "-deffnm", "relax", "-v", "-ntomp", "10", "-gpu_id", "0", "-pinoffset", "10", "-ntmpi", "1"]
+    cmd = ["gmx", "mdrun", "-deffnm", "relax", "-v", "-nt", str(mdrun_threads), "-ntmpi", "1"]
 
-    run_simulation(cmd1, cmd2, iteration)
+    run_command(cmd, iteration)
 # --------------------------------------------------
 
 
 # --------------------------------------------------
-def simulate(iteration, settings):
+def simulate(iteration, mdrun_threads):
     """ Production metadynamics simulations."""
 
     # mdp files
     base_dir = os.path.dirname(os.path.abspath(__file__))
     params_dir = f'{base_dir}/user/params'
-    
-    simulation_replica = settings["simulation_replica"]
-    for i in range(simulation_replica):
-        rep_dir = os.path.join(iteration, str(i))
 
-        # gromacs pre-processor
-        cmd = [
-        "gmx", "grompp",
-        "-f", f"{params_dir}/prod.mdp",
-        "-c", f"{i}/relax.gro", "-n", "index.ndx", "-p", "system.top", # system coordinates, coordinates for position restraints, index and topology
-        "-o", f"{i}/production.tpr", 
-        ]
+    # gromacs pre-processor
+    cmd = [
+    "gmx", "grompp",
+    "-f", f"{params_dir}/prod.mdp",
+    "-c", "relax.gro", "-n", "index.ndx", "-p", "system.top", # system coordinates, coordinates for position restraints, index and topology
+    "-o", "production.tpr", 
+    ]
 
-        run_command(cmd, iteration)
+    run_command(cmd, iteration)
 
-        # copy topology and martini.itps
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        src = f'{base_dir}/user/plumed'
-        dst = rep_dir
+    # copy topology and martini.itps
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    src = f'{base_dir}/user/plumed'
+    dst = iteration
 
-        for file in glob.glob(os.path.join(src, "plumed*")):
-            shutil.copy(file, dst)
+    for file in glob.glob(os.path.join(src, "plumed*")):
+        shutil.copy(file, dst)
 
     # actual simulations
-    cmd1 = ["gmx", "mdrun", "-deffnm", "production", "-plumed", "plumed.dat", "-v", "-ntomp", "10", "-gpu_id", "0", "-pin", "on", "-ntmpi", "1"]
-    cmd2 = ["gmx", "mdrun", "-deffnm", "production", "-plumed", "plumed.dat", "-v", "-ntomp", "10", "-gpu_id", "0", "-pinoffset", "10", "-ntmpi", "1"]
+    cmd = ["gmx", "mdrun", "-deffnm", "production", "-plumed", "plumed.dat", "-v", "-nt", str(mdrun_threads), "-ntmpi", "1"]
 
-    run_simulation(cmd1, cmd2, iteration)
-
+    run_command(cmd, iteration)
 # --------------------------------------------------
 
 
 # --------------------------------------------------
-def process(iteration, settings):
+def process(iteration):
     """ Reimage trajectory. """
 
-    simulation_replica = settings["simulation_replica"]
-    for i in range(simulation_replica):
-        rep_dir = os.path.join(iteration, str(i))
+    cmd = [
+    "gmx", "trjconv",
+    "-f", "production.xtc", "-s", "minimization.tpr", "-n", "index.ndx", 
+    "-o", "tmp.xtc", # output trajectory
+    "-pbc", "nojump", # puts all atoms back in box
+    "-dt", "1000", # writes frame every nanosecond 
+    ]
+    
+    run_command(cmd, iteration, "System\n")
 
-        cmd = [
-        "gmx", "trjconv",
-        "-f", "production.xtc", "-s", "../minimization.tpr", "-n", "../index.ndx", 
-        "-o", "tmp.xtc", # output trajectory
-        "-pbc", "nojump", # puts all atoms back in box
-        "-dt", "1000", # writes frame every nanosecond 
-        ]
-        
-        run_command(cmd, rep_dir, "System\n")
-
-        cmd = [
-        "gmx", "trjconv",
-        "-f", "tmp.xtc", "-s", "../minimization.tpr", "-n", "../index.ndx", 
-        "-o", "reimage.xtc", # output trajectory
-        "-fit", "rot+trans", # aligns protein on reference structure (-s)
-        ]
-        
-        run_command(cmd, rep_dir, "Protein\nSystem\n")
+    cmd = [
+    "gmx", "trjconv",
+    "-f", "tmp.xtc", "-s", "minimization.tpr", "-n", "index.ndx", 
+    "-o", "reimage.xtc", # output trajectory
+    "-fit", "rot+trans", # aligns protein on reference structure (-s)
+    ]
+    
+    run_command(cmd, iteration, "Protein\nSystem\n")
 
 # --------------------------------------------------
 
@@ -348,57 +318,22 @@ def JS_divergence(p, q):
 
 
 # --------------------------------------------------
-def compute_loss(iteration, settings):
+def compute_loss(iteration):
     """Compute difference between current FES and target FES."""
     base_dir = os.path.dirname(os.path.abspath(__file__))
     ref_dir = f'{base_dir}/user/ref_data'
 
-    loss = 0
+    # reference FES
+    target = np.load(f'{ref_dir}/target.npy') # first column cv, second column probability
 
-    simulation_replica = settings["simulation_replica"]
-    for i in range(simulation_replica):
-        rep_dir = os.path.join(iteration, str(i))
+    # current FES
+    bias_data = np.loadtxt(f'{iteration}/HILLS')
+    cv_grid = target[:,0]
+    observation = FES(bias_data, cv_grid, sigma_col=3, height_col=4)
 
-        # reference FES
-        target = np.load(f'{ref_dir}/target.npy') # first column cv, second column probability
-
-        # current FES
-        bias_data = np.loadtxt(f'{rep_dir}/HILLS')
-        cv_grid = target[:,0]
-        observation = FES(bias_data, cv_grid, sigma_col=3, height_col=4)
-
-        loss_i = JS_divergence(target[:,1], observation) 
-        loss += loss_i
-          
-    loss = loss / simulation_replica # average over all replica
+    loss = JS_divergence(target[:,1], observation) 
  
     return loss
-# --------------------------------------------------
-
-
-# --------------------------------------------------
-def objective(tag, x, settings, states):
-    """x = [ts_scaling, ts_cutoff, u0, u1] -> loss (float)"""
-    itdir = f"output/PSO_{tag}"
-    if os.path.isdir(itdir): shutil.rmtree(itdir)
-    os.makedirs(itdir, exist_ok=True)
-
-    setup_cg_system(itdir)
-
-    ts_scaling = float(x[0])
-    ts_cutoff  = float(x[1])
-    unique_pair_scaling = f"{float(x[2])},{float(x[3])}"
-    states_str = ",".join(states)
-
-    add_OLIVES(states_str, itdir, ts_scaling=ts_scaling,
-               ts_cutoff=ts_cutoff, unique_pair_scaling=unique_pair_scaling)
-
-    minimize(itdir)
-    equilibrate(itdir, settings)
-    simulate(itdir, settings)
-    process(itdir, settings)
-
-    return float(compute_loss(itdir, settings))
 # --------------------------------------------------
 
 
@@ -455,8 +390,41 @@ def pso_step(state, fitness):
 
 
 # --------------------------------------------------
+def run_particle_replica(it, p, r, x, settings, states, mdrun_threads):
+    """Run a single particle-replica combination."""
+
+    tag = f"it{it}_p{p}_r{r}"
+    itdir = f"output/PSO_{tag}"
+    if os.path.isdir(itdir):
+        shutil.rmtree(itdir)
+    os.makedirs(itdir, exist_ok=True)
+
+    # setup system
+    setup_cg_system(itdir)
+
+    ts_scaling = float(x[0])
+    ts_cutoff  = float(x[1])
+    unique_pair_scaling = f"{float(x[2])},{float(x[3])}"
+    states_str = ",".join(states)
+
+    add_OLIVES(states_str, itdir, ts_scaling=ts_scaling,
+               ts_cutoff=ts_cutoff, unique_pair_scaling=unique_pair_scaling)
+
+    minimize(itdir)
+    equilibrate(itdir, mdrun_threads)  
+    simulate(itdir, mdrun_threads)
+    process(itdir)
+
+    return compute_loss(itdir)
+# --------------------------------------------------
+
+
+# --------------------------------------------------
 def main() -> None:
     """ Particle Swarm Optimization. """
+    comm = MPI.COMM_WORLD
+    rank = comm.Get_rank()
+    size = comm.Get_size()
 
     args = get_args()
     
@@ -464,71 +432,85 @@ def main() -> None:
     with open(args.settings, 'r') as file:
         settings = json.load(file)
 
+    mdrun_threads = args.mdrun_threads
+
     n_particles = settings["n_particles"]
+    n_replicas = settings["n_replicas"]
     n_iters = settings["n_iters"]
     start_iter = settings["start_iter"]
-    results_csv = "pso_history.csv"
 
     states = [f"{s.split('.')[0]}_cg.pdb" for s in settings["states"]]
 
     bounds = {
         "ts_scaling": (0.05, 1.0),
         "ts_cutoff":  (0.2,  1.0),
-        "u0":         (0.0,  2.0),
-        "u1":         (0.0,  2.0),
+        "u0":         (0.0,  10.0),
+        "u1":         (0.0,  10.0),
     }
 
-    # Initialize or restart swarm
-    state_file = f"output/pso_state_it{start_iter-1}.npz"
-    if start_iter > 0 and os.path.exists(state_file):
-        data = np.load(state_file)
-        st = {
-            "X": data["X"], "V": data["V"], "P": data["P"], "Pf": data["Pf"],
-            "g": data["g"], "gf": float(data["gf"]),
-            "keys": list(bounds.keys()),
-            "lb": np.array([bounds[k][0] for k in bounds]),
-            "ub": np.array([bounds[k][1] for k in bounds]),
-            "vmax": 0.2 * (np.array([bounds[k][1] for k in bounds]) - np.array([bounds[k][0] for k in bounds])),
-            "w": 0.6, "c1": 1.5, "c2": 1.5,
-            "rng": np.random.default_rng(int(time.time()))
-        }
-        print(f"Restarting from iteration {start_iter}, loaded previous state.")
-    else:
-        st = pso_init(bounds, n_particles, seed=int(time.time()))
-        print("Starting new PSO run.")
+    st = pso_init(bounds, n_particles, seed=int(time.time()))
+    hist = []
 
-    if start_iter > 0 and os.path.exists(results_csv):
-        hist = pd.read_csv(results_csv).to_dict(orient="records")
-    else:
-        hist = []
-
+    if start_iter > 0:
+        prev_it = start_iter - 1
+        fn = f"output/pso_state_it{prev_it}.npz"
+        if os.path.isfile(fn):
+            data = np.load(fn)
+            st["X"] = data["X"]
+            st["V"] = data["V"]
+            st["P"] = data["P"]
+            st["Pf"] = data["Pf"]
+            st["g"] = data["g"]
+            st["gf"] = float(data["gf"])
+        # restore history if present
+        if os.path.isfile("pso_history.csv"):
+            hist = pd.read_csv("pso_history.csv").to_dict("records")
 
     for it in range(start_iter, n_iters):
-        fvals = []
-        for p in range(n_particles):
-            x = st["X"][p]
-            tag = f"it{it}_p{p}"
-            f = objective(tag, x, settings, states)
-            fvals.append(f)
-            hist.append({"iter": it, "particle": p, **{k: float(x[i]) for i, k in enumerate(st["keys"])}, "loss": float(f)})
+        # Flatten all particle × replica tasks
+        tasks = [(p, r) for p in range(n_particles) for r in range(n_replicas)]
+        local_results = []
 
-        st = pso_step(st, np.array(fvals, float))
+        # MPI: each rank runs a subset of tasks
+        for idx, (p, r) in enumerate(tasks):
+            if idx % size == rank:
+                x = st["X"][p]
+                loss = run_particle_replica(it, p, r, x, settings, states, mdrun_threads)
+                local_results.append((p, r, loss))
 
-        # save PSO state after each iteration
-        np.savez(f"output/pso_state_it{it}.npz",
-                 X=st["X"], V=st["V"], P=st["P"], Pf=st["Pf"],
-                 g=st["g"], gf=st["gf"])
+        # Gather all results from all ranks
+        all_results = comm.gather(local_results, root=0)
 
-        # save history
-        pd.DataFrame(hist).to_csv(results_csv, index=False) # overwrites the full dataframe at each time
+        if rank == 0:
+            # Flatten gathered results
+            all_results = [item for sublist in all_results for item in sublist]
 
-        print(f"iter {it}: best={st['gf']:.6f} params=" +
-              str({k: float(v) for k, v in zip(st['keys'], st['g'])}))
+            # Compute mean loss per particle (average over replicas)
+            particle_losses = np.zeros(n_particles)
+            for p in range(n_particles):
+                losses = [loss for pp, rr, loss in all_results if pp == p]
+                particle_losses[p] = np.mean(losses)
 
-    best = {k: float(v) for k, v in zip(st["keys"], st["g"])}
-    print("Final best:", best, float(st["gf"]))
+            # PSO update
+            st = pso_step(st, particle_losses)
 
+            # Record history
+            for p in range(n_particles):
+                x = st["X"][p]
+                hist.append({"iter": it, "particle": p, **{k: float(x[i]) for i, k in enumerate(st['keys'])}, "loss": float(particle_losses[p])})
 
+            # Save state and history
+            os.makedirs("output", exist_ok=True)
+            np.savez(f"output/pso_state_it{it}.npz",
+                     X=st["X"], V=st["V"], P=st["P"], Pf=st["Pf"],
+                     g=st["g"], gf=st["gf"])
+            pd.DataFrame(hist).to_csv("pso_history.csv", index=False)
+            print(f"iter {it}: best={st['gf']:.6f} params=" +
+                  str({k: float(v) for k, v in zip(st['keys'], st['g'])}))
+
+    if rank == 0:
+        best = {k: float(v) for k, v in zip(st["keys"], st["g"])}
+        print("Final best:", best, float(st["gf"]))
 # --------------------------------------------------
 if __name__ == '__main__':
     main()
