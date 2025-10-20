@@ -15,6 +15,7 @@ import glob
 import shutil
 import json
 import time
+import shlex
 from pathlib import Path
 import re
 
@@ -71,6 +72,63 @@ def run_command(cmd, cwd, input_data=None):
 
 
 # --------------------------------------------------
+def _find_latest_checkpoint(cwd):
+    pts = glob.glob(os.path.join(cwd, "*.cpt"))
+    if not pts:
+        pts = glob.glob(os.path.join(cwd, "*state.cpt"))
+    return max(pts, default=None, key=os.path.getmtime) if pts else None
+# --------------------------------------------------
+
+
+# --------------------------------------------------
+def run_with_restarts(cmd, cwd, max_retries=3, retry_delay=5, capture_log="md.log"):
+    """
+    Run cmd (list) in cwd. On non-zero exit try to find a GROMACS checkpoint (*.cpt or *state.cpt)
+    and restart using -cpi <checkpoint>. Retry up to max_retries. Returns final returncode.
+    Stdout/stderr are appended to capture_log for inspection.
+    """
+    if isinstance(cmd, str):
+        cmd = shlex.split(cmd)
+
+    for attempt in range(1, max_retries + 1):
+        with open(os.path.join(cwd, capture_log), "ab") as logf:
+            proc = subprocess.run(cmd, cwd=cwd, stdout=logf, stderr=logf)
+        rc = proc.returncode
+        print(f'pupskeks: {rc}, {cwd}')
+        if rc == 0:
+            return 0
+
+        # non-zero: try to locate checkpoint
+        cpt = _find_latest_checkpoint(cwd)
+        if not cpt:
+            # nothing to restart from -> decide whether to retry (maybe transient)
+            if attempt < max_retries:
+                time.sleep(retry_delay * attempt)
+                continue
+            return rc
+
+        # prepare restart command: insert "-cpi", <cpt> if not already present
+        if "-cpi" in cmd:
+            # already had cpi -> just retry same command (should not normally happen)
+            new_cmd = cmd
+        else:
+            # try to preserve -deffnm or -deffnm value if present; otherwise just append -cpi
+            new_cmd = cmd + ["-cpi", cpt]
+
+        # append a short note to log
+        with open(os.path.join(cwd, capture_log), "a") as logf:
+            logf.write(f"\n# Restart attempt {attempt} with checkpoint {cpt}\n")
+
+        # small delay before restart
+        time.sleep(retry_delay * attempt)
+        # loop will run the new_cmd on next iteration; set cmd to new_cmd
+        cmd = new_cmd
+
+    return rc
+# --------------------------------------------------
+
+
+# --------------------------------------------------
 def setup_cg_system(iteration):
     """ Create simulations system and topology. """
 
@@ -93,7 +151,7 @@ def setup_cg_system(iteration):
 
 
 # --------------------------------------------------
-def add_OLIVES(states_str, iteration, ts_scaling=False, ts_cutoff=False, unique_pair_scaling=False):
+def add_OLIVES(states_str, iteration, ts_scaling=False, unique_pair_scaling=False):
     """ Create multi-state OLIVES network. """
     
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -107,10 +165,6 @@ def add_OLIVES(states_str, iteration, ts_scaling=False, ts_cutoff=False, unique_
     if ts_scaling:
         cmd.append("--ts_scaling")
         cmd.append(f"{ts_scaling}")
-
-    if ts_cutoff:
-        cmd.append("--ts_cutoff")
-        cmd.append(f"{ts_cutoff}")
 
     if unique_pair_scaling:
         cmd.append("--unique_pair_scaling")
@@ -186,20 +240,46 @@ def equilibrate(iteration, mdrun_threads):
     base_dir = os.path.dirname(os.path.abspath(__file__))
     params_dir = f'{base_dir}/user/params'
 
-    # gromacs pre-processor
+    # small time step
     cmd = [
     "gmx", "grompp",
-    "-f", f"{params_dir}/rel.mdp",
+    "-f", f"{params_dir}/rel_smalldt.mdp",
     "-c", "minimization.gro", "-r", "minimization.gro", "-n", "index.ndx", "-p", "system.top", # system coordinates, coordinates for position restraints, index and topology
-    "-o", "relax.tpr", "-maxwarn", "1" # ignore warning of pressure coupling compined with position restraints
+    "-o", "relax_smalldt.tpr", "-maxwarn", "2" # ignore warning of pressure coupling compined with position restraints, berendesen thermostat/barostat
     ]
+
+    run_command(cmd, iteration)
+
+    cmd = ["gmx", "mdrun", "-deffnm", "relax_smalldt", "-v", "-nt", str(mdrun_threads), "-ntmpi", "1"]
     
     run_command(cmd, iteration)
 
-    # actual simulations
-    cmd = ["gmx", "mdrun", "-deffnm", "relax", "-v", "-nt", str(mdrun_threads), "-ntmpi", "1"]
+    # production time step
+    grompp_cmd = [
+    "gmx", "grompp",
+    "-f", f"{params_dir}/rel.mdp",
+    "-c", "relax_smalldt.gro", "-r", "relax_smalldt.gro", "-n", "index.ndx", "-p", "system.top", # system coordinates, coordinates for position restraints, index and topology
+    "-o", "relax.tpr", "-maxwarn", "2" # ignore warning of pressure coupling compined with position restraints, berendesen thermostat/barostat
+    ]
+    
+    run_command(grompp_cmd, iteration)
 
-    run_command(cmd, iteration)
+    mdrun_cmd = ["gmx", "mdrun", "-deffnm", "relax", "-v", "-nt", str(mdrun_threads), "-ntmpi", "1"]
+    
+    rc = run_with_restarts(mdrun_cmd, iteration, max_retries=10, retry_delay=10)
+    
+    # if still failing, try a small number of full grompp+mdrun attempts, then fail hard
+    if rc != 0:
+        max_outer_retries = 3
+        for attempt in range(1, max_outer_retries + 1):
+            run_command(grompp_cmd, iteration)                 # regenerate .tpr
+            rc = run_with_restarts(mdrun_cmd, iteration, max_retries=10, retry_delay=10)
+            if rc == 0:
+                break
+            time.sleep(10 * attempt)
+
+    if rc != 0:
+        raise RuntimeError(f"relax mdrun failed after retries (rc={rc})")
 # --------------------------------------------------
 
 
@@ -403,14 +483,13 @@ def run_particle_replica(it, p, r, x, settings, states, mdrun_threads):
     setup_cg_system(itdir)
 
     ts_scaling = float(x[0])
-    ts_cutoff  = float(x[1])
-    unique_pair_scaling = f"{float(x[2])},{float(x[3])}"
+    unique_pair_scaling = f"{float(x[1])},{float(x[2])}"
     states_str = ",".join(states)
 
     add_OLIVES(states_str, itdir, ts_scaling=ts_scaling,
-               ts_cutoff=ts_cutoff, unique_pair_scaling=unique_pair_scaling)
-
-    minimize(itdir)
+               unique_pair_scaling=unique_pair_scaling)
+    print(f'pupskeks, {itdir}, {ts_scaling}, {unique_pair_scaling}')
+    minimize(itdir) 
     equilibrate(itdir, mdrun_threads)  
     simulate(itdir, mdrun_threads)
     process(itdir)
@@ -442,10 +521,9 @@ def main() -> None:
     states = [f"{s.split('.')[0]}_cg.pdb" for s in settings["states"]]
 
     bounds = {
-        "ts_scaling": (0.05, 1.0),
-        "ts_cutoff":  (0.2,  1.0),
-        "u0":         (0.0,  10.0),
-        "u1":         (0.0,  10.0),
+        "ts_scaling": (0.05, 0.8),
+        "u0":         (0.0,  2.0),
+        "u1":         (0.0,  2.0),
     }
 
     st = pso_init(bounds, n_particles, seed=int(time.time()))
@@ -479,8 +557,9 @@ def main() -> None:
                 local_results.append((p, r, loss))
 
         # Gather all results from all ranks
+        comm.Barrier()
         all_results = comm.gather(local_results, root=0)
-
+        print("all_results", all_results)
         if rank == 0:
             # Flatten gathered results
             all_results = [item for sublist in all_results for item in sublist]

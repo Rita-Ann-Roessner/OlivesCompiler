@@ -2,10 +2,9 @@
     "states":["GHSR-active.pdb","GHSR-inactive.pdb"],
     "initial_model":"GHSR-active.pdb",
     "ts_scaling": true,
-    "ts_cutoff": true,
     "unique_pair_scaling": true,
-    "n_particles":2,
-    "n_replicas":2,
-    "n_iters":3,
-    "start_iter":2
+    "n_particles":5,
+    "n_replicas":4,
+    "n_iters":100,
+    "start_iter":6
 }   
