@@ -1,0 +1,20 @@
+Covariance analysis log, written Mon Oct 20 14:25:35 2025
+
+Program: covar
+Working directory: /mnt/DATA20To/rita/OlivesCompiler/pca
+
+Read 1000 frames from pca.xtc (time 0 to 499 ps)
+Read reference structure for fit from pca.pdb
+
+Analysis group is 'System' (186 atoms)
+Fit group is 'System' (186 atoms)
+Analysis is non-mass weighted
+Fit is non-mass weighted
+Diagonalized the 558x558 covariance matrix
+Trace of the covariance matrix before diagonalizing: 4.9344
+Trace of the covariance matrix after diagonalizing: 4.9344
+
+Wrote 558 eigenvalues to eigenval.xvg
+Wrote reference structure to eigenvec.trr
+Wrote average structure to average.pdb and eigenvec.trr
+Wrote eigenvectors 1 to 558 to eigenvec.trr
