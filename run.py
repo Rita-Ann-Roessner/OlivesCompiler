@@ -483,8 +483,7 @@ def run_particle_replica(it, p, r, x, settings, states, mdrun_threads):
     setup_cg_system(itdir)
 
     ts_scaling = float(x[0])
-    # unique = u / ts_scaling (-> ts_scaling * u = [lower_bounds,upper_bounds])
-    unique_pair_scaling = f"{float(x[1]/x[0])},{float(x[2]/x[0])}"
+    unique_pair_scaling = f"{float(x[1])},{float(x[2])}"
     states_str = ",".join(states)
 
     add_OLIVES(states_str, itdir, ts_scaling=ts_scaling,
@@ -522,12 +521,12 @@ def main() -> None:
     states = [f"{s.split('.')[0]}_cg.pdb" for s in settings["states"]]
 
     bounds = {
-        "ts_scaling": (0.05, 0.8),
-        "u0":         (0.0,  1.0), # unique = u / ts_scaling (-> ts_scaling * u = [lower_bounds,upper_bounds])
-        "u1":         (0.0,  1.0),
+        "ts_scaling": (0.05, 0.3),
+        "u0":         (0.0,  5.0), 
+        "u1":         (0.0,  5.0),
     }
 
-    st = pso_init(bounds, n_particles, seed=int(time.time()))
+    st = pso_init(bounds, n_particles, w=0.6, c1=2.0, c2=0.5, seed=int(time.time()))
     hist = []
 
     if start_iter > 0:
