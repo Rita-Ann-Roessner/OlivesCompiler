@@ -483,7 +483,7 @@ def run_particle_replica(it, p, r, x, settings, states, mdrun_threads):
     setup_cg_system(itdir)
 
     ts_scaling = float(x[0])
-    unique_pair_scaling = f"{float(1/x[1])},{float(1/x[2])}"
+    unique_pair_scaling = f"{float(x[1]/x[0])},{float(x[2]/x[0])}"
     states_str = ",".join(states)
 
     add_OLIVES(states_str, itdir, ts_scaling=ts_scaling,
