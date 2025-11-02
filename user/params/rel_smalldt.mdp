@@ -1,17 +1,17 @@
+title                    = Martini
+
 refcoord_scaling         = com
 integrator               = md
-dt                       = 0.020 ;ps
-nsteps                   = 5000 ;5000000 ; 100 ns
-;nsteps                   = 250000000 ; 5 us
-;nsteps                   = 50000000 ; 1 us
+dt                       = 0.01 
+nsteps                   = 5000 ;1000000 ; 10ns
 nstcomm                  = 100
-comm-grps		         = System
+comm-grps		 = 
 
 nstxout                  = 0
 nstvout                  = 0
 nstfout                  = 0
-nstlog                   = 1000 
-nstenergy                = 1000    
+nstlog                   = 10000 
+nstenergy                = 100   
 nstxtcout                = 1000   
 xtc_precision            = 100
 xtc-grps                 = 
@@ -25,29 +25,28 @@ pbc                      = xyz
 
 coulombtype              = reaction-field
 rcoulomb                 = 1.1
-epsilon_r                = 15 ;15	
+epsilon_r                = 15 ;(with polarizable water)
 epsilon_rf               = 0 
-vdw_type                 = cutoff 
+vdw_type                 = cutoff ;(for use with Verlet-pairlist)   
 vdw-modifier             = Potential-shift-verlet
-rvdw                     = 1.1 
+rvdw                     = 1.1 ;(for use with Verlet-pairlist)
 
-tcoupl                   = v-rescale 
+tcoupl                   = berendsen 
 tc-grps                  = Protein POPC W_ION
 tau_t                    = 1.0      1.0     1.0
-ref_t                    = 300      300     300
-Pcoupl                   = parrinello-rahman
+ref_t                    = 300      300	    300 
+Pcoupl                   = berendsen  
 Pcoupltype               = semiisotropic
-tau_p                    = 12.0  
-compressibility          = 3e-4 3e-4       
-ref_p                    = 1.0 1.0       
+tau_p                    = 12.0 
+compressibility          = 3e-4 3e-4     
+ref_p                    = 1.0 1.0      
 
-continuation		     = yes
-gen_vel                  = no
+gen_vel                  = yes
 gen_temp                 = 300
-gen_seed                 = 8008135
+gen_seed                 = -1 ;8008135
 
 constraints              = none 
 constraint_algorithm     = Lincs
-lincs_order              = 4
-lincs_iter               = 1
+lincs_order              = 12
+lincs_iter               = 2
 lincs_warnangle          = 90

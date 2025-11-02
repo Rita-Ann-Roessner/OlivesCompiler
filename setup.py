@@ -104,7 +104,7 @@ def insane(model_cg, base):
 
     # add membrane and solvent
     cmd = [
-    "insane", "-f", "init_cg.pdb",
+    "insane", "-f", f"{model_cg}",
     "-p", "system.top", "-o", "init.gro",
     "-pbc", "cubic", "-x", f"{dims[0]}", "-y", f"{dims[1]}", "-z", f"{dims[2]}", # box dimensions
     "-sol", "W", "-salt", "0.15", # add solvent

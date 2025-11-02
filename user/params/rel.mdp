@@ -2,8 +2,8 @@ title                    = Martini
 
 refcoord_scaling         = com
 integrator               = md
-dt                       = 0.01 
-nsteps                   = 500000 ; 5ns
+dt                       = 0.02 
+nsteps                   = 5000 ;250000 ; 5ns
 nstcomm                  = 100
 comm-grps		 = 
 
@@ -43,7 +43,7 @@ ref_p                    = 1.0 1.0
 
 gen_vel                  = yes
 gen_temp                 = 300
-gen_seed                 = 8008135
+gen_seed                 = -1 ;8008135
 
 constraints              = none 
 constraint_algorithm     = Lincs

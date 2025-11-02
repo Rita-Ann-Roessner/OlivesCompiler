@@ -3,8 +3,8 @@
     "initial_model":"GHSR-active.pdb",
     "ts_scaling": true,
     "unique_pair_scaling": true,
-    "n_particles":5,
-    "n_replicas":4,
+    "n_particles":2,
+    "n_replicas":2,
     "n_iters":100,
-    "start_iter":6
+    "start_iter":0
 }   

@@ -228,14 +228,6 @@ def minimize(iteration):
 def equilibrate(iteration, mdrun_threads):
     """ Equilibrate system in NPT ensemble. Position restraints on protein backbone beads. """
 
-    # create index
-    cmd = [
-    "gmx", "make_ndx", "-f", "minimization.gro"
-    ]
-
-    ndx_input = '"W" | "ION"\nq\n'
-    run_command(cmd, iteration, ndx_input)
-
     # mdp files
     base_dir = os.path.dirname(os.path.abspath(__file__))
     params_dir = f'{base_dir}/user/params'
