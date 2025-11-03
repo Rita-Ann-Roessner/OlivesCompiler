@@ -329,7 +329,7 @@ def process(iteration):
     "-fit", "rot+trans", # aligns protein on reference structure (-s)
     ]
     
-    run_command(cmd, iteration, "Protein\nSystem\n")
+    run_command(cmd, iteration, "SOLU\nSystem\n")
 
 # --------------------------------------------------
 

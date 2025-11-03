@@ -1,4 +1,4 @@
 output*/
---pycache--/
+__pycache__/
 *.csv
 \#*\#

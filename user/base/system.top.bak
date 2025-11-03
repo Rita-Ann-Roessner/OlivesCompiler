@@ -1,4 +1,4 @@
-#include "martini_v3.0.0_Up_031c.itp"
+#include "martini_v3.0.0.itp"
 #include "molecule_0.itp"
 #include "molecule_1.itp"
 #include "martini_v3.0.0_phospholipids.itp"
