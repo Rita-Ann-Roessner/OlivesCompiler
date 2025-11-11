@@ -492,13 +492,13 @@ def run_particle_replica(it, p, r, x, settings, states, mdrun_threads):
 
 # --------------------------------------------------
 def main() -> None:
-    """ Particle Swarm Optimization. """
+    """ Particle Swarm Optimization with MPI broadcasts. """
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
 
     args = get_args()
-    
+
     # load settings from json files
     with open(args.settings, 'r') as file:
         settings = json.load(file)
@@ -506,71 +506,82 @@ def main() -> None:
     mdrun_threads = args.mdrun_threads
 
     n_particles = settings["n_particles"]
-    n_replicas = settings["n_replicas"]
-    n_iters = settings["n_iters"]
-    start_iter = settings["start_iter"]
+    n_replicas  = settings["n_replicas"]
+    n_iters     = settings["n_iters"]
+    start_iter  = settings["start_iter"]
 
     states = [f"{s.split('.')[0]}_cg.pdb" for s in settings["states"]]
 
     bounds = {
         "ts_scaling": (0.05, 0.7),
-        "u0":         (0.0,  1), 
-        "u1":         (0.0,  1),
+        "u0":         (0.0,  1.0),
+        "u1":         (0.0,  1.0),
     }
 
-    st = pso_init(bounds, n_particles, w=0.6, c1=2.0, c2=0.5, seed=int(time.time()))
-    hist = []
+    # ---------- init on root, then broadcast ----------
+    if rank == 0:
+        st = pso_init(bounds, n_particles, w=0.6, c1=2.0, c2=0.5, seed=int(time.time()))
+        hist = []
 
-    if start_iter > 0:
-        prev_it = start_iter - 1
-        fn = f"output/pso_state_it{prev_it}.npz"
-        if os.path.isfile(fn):
-            data = np.load(fn)
-            st["X"] = data["X"]
-            st["V"] = data["V"]
-            st["P"] = data["P"]
-            st["Pf"] = data["Pf"]
-            st["g"] = data["g"]
-            st["gf"] = float(data["gf"])
-        # restore history if present
-        if os.path.isfile("pso_history.csv"):
-            hist = pd.read_csv("pso_history.csv").to_dict("records")
+        # restore previous iteration if requested
+        if start_iter > 0:
+            prev_it = start_iter - 1
+            fn = f"output/pso_state_it{prev_it}.npz"
+            if os.path.isfile(fn):
+                data = np.load(fn, allow_pickle=False)
+                st["X"]  = data["X"]
+                st["V"]  = data["V"]
+                st["P"]  = data["P"]
+                st["Pf"] = data["Pf"]
+                st["g"]  = data["g"]
+                st["gf"] = float(data["gf"])
 
+            if os.path.isfile("pso_history.csv"):
+                hist = pd.read_csv("pso_history.csv").to_dict("records")
+    else:
+        st, hist = None, None
+
+    # everybody gets the exact same starting state/history
+    st   = comm.bcast(st,   root=0)
+    hist = comm.bcast(hist, root=0)
+
+    # ---------- optimization loop ----------
     for it in range(start_iter, n_iters):
-        # Flatten all particle × replica tasks
+        # same particle positions on all ranks at the start of this iter
         tasks = [(p, r) for p in range(n_particles) for r in range(n_replicas)]
         local_results = []
 
-        # MPI: each rank runs a subset of tasks
+        # split the particle×replica work across ranks
         for idx, (p, r) in enumerate(tasks):
             if idx % size == rank:
                 x = st["X"][p]
                 loss = run_particle_replica(it, p, r, x, settings, states, mdrun_threads)
                 local_results.append((p, r, loss))
 
-        # Gather all results from all ranks
         comm.Barrier()
         all_results = comm.gather(local_results, root=0)
-        print("all_results", all_results)
-        if rank == 0:
-            # Flatten gathered results
-            all_results = [item for sublist in all_results for item in sublist]
 
-            # Compute mean loss per particle (average over replicas)
-            particle_losses = np.zeros(n_particles)
+        if rank == 0:
+            # flatten and compute mean loss per particle over replicas
+            all_results = [item for sub in all_results for item in sub]
+            particle_losses = np.zeros(n_particles, dtype=float)
             for p in range(n_particles):
                 losses = [loss for pp, rr, loss in all_results if pp == p]
-                particle_losses[p] = np.mean(losses)
+                particle_losses[p] = float(np.mean(losses))
 
-            # PSO update
+            # single PSO update on root
             st = pso_step(st, particle_losses)
 
-            # Record history
+            # history & checkpoints
             for p in range(n_particles):
                 x = st["X"][p]
-                hist.append({"iter": it, "particle": p, **{k: float(x[i]) for i, k in enumerate(st['keys'])}, "loss": float(particle_losses[p])})
+                hist.append({
+                    "iter": it,
+                    "particle": p,
+                    **{k: float(x[i]) for i, k in enumerate(st['keys'])},
+                    "loss": float(particle_losses[p]),
+                })
 
-            # Save state and history
             os.makedirs("output", exist_ok=True)
             np.savez(f"output/pso_state_it{it}.npz",
                      X=st["X"], V=st["V"], P=st["P"], Pf=st["Pf"],
@@ -578,6 +589,10 @@ def main() -> None:
             pd.DataFrame(hist).to_csv("pso_history.csv", index=False)
             print(f"iter {it}: best={st['gf']:.6f} params=" +
                   str({k: float(v) for k, v in zip(st['keys'], st['g'])}))
+
+        # broadcast UPDATED swarm to all ranks before next iteration
+        st   = comm.bcast(st,   root=0)
+        hist = comm.bcast(hist, root=0)
 
     if rank == 0:
         best = {k: float(v) for k, v in zip(st["keys"], st["g"])}
