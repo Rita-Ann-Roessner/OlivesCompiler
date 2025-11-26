@@ -151,7 +151,7 @@ def setup_cg_system(iteration):
 
 
 # --------------------------------------------------
-def add_OLIVES(states_str, iteration, ts_scaling=False, unique_pair_scaling=False):
+def add_OLIVES(states_str, iteration, ts_scaling=False, unique_pair_scaling=False, ts_cutoff=False):
     """ Create multi-state OLIVES network. """
     
     base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -169,6 +169,10 @@ def add_OLIVES(states_str, iteration, ts_scaling=False, unique_pair_scaling=Fals
     if unique_pair_scaling:
         cmd.append("--unique_pair_scaling")
         cmd.append(f"{unique_pair_scaling}")
+
+    if ts_cutoff:
+        cmd.append("--ts_cutoff")
+        cmd.append(f"{ts_cutoff}")
 
     run_command(cmd, iteration)
 
@@ -476,10 +480,11 @@ def run_particle_replica(it, p, r, x, settings, states, mdrun_threads):
 
     ts_scaling = float(x[0])
     unique_pair_scaling = f"{float(x[1]/x[0])},{float(x[2]/x[0])}"
+    ts_cutoff = float(x[3])
     states_str = ",".join(states)
 
     add_OLIVES(states_str, itdir, ts_scaling=ts_scaling,
-               unique_pair_scaling=unique_pair_scaling)
+               unique_pair_scaling=unique_pair_scaling, ts_cutoff=ts_cutoff)
     print(f'pupskeks, {itdir}, {ts_scaling}, {unique_pair_scaling}')
     minimize(itdir) 
     equilibrate(itdir, mdrun_threads)  
@@ -516,7 +521,9 @@ def main() -> None:
         "ts_scaling": (0.05, 0.7),
         "u0":         (0.0,  1.0),
         "u1":         (0.0,  1.0),
+        "ts_cutoff":  (0.2,  0.8),
     }
+    # NOTE: currently everything in bounds is subject to optimizetion even if not used in add_OLIVES(), change that 
 
     # ---------- init on root, then broadcast ----------
     if rank == 0:
