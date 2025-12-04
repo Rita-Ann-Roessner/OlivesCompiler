@@ -1,0 +1,96 @@
+HEADER    
+TITLE     MDANALYSIS FRAME 0: Created by PDBWriter
+CRYST1    1.000    1.000    1.000  90.00  90.00  90.00 P 1           1
+REMARK     285 UNITARY VALUES FOR THE UNIT CELL AUTOMATICALLY SET
+REMARK     285 BY MDANALYSIS PDBWRITER BECAUSE UNIT CELL INFORMATION
+REMARK     285 WAS MISSING.
+REMARK     285 PROTEIN DATA BANK CONVENTIONS REQUIRE THAT
+REMARK     285 CRYST1 RECORD IS INCLUDED, BUT THE VALUES ON
+REMARK     285 THIS RECORD ARE MEANINGLESS.
+ATOM      1  N   GLY X   1      42.669  47.960  72.032  1.00  0.00      X       
+ATOM      2  CA  GLY X   1      43.100  46.830  70.990  1.00  0.00      X       
+ATOM      3  C   GLY X   1      43.070  45.480  71.630  1.00  0.00      X       
+ATOM      4  O   GLY X   1      41.980  45.110  72.120  1.00  0.00      X       
+ATOM      5  N   SER X   2      44.337  44.977  71.911  1.00  0.00      X       
+ATOM      6  CA  SER X   2      44.460  43.700  72.670  1.00  0.00      X       
+ATOM      7  C   SER X   2      44.330  43.930  74.170  1.00  0.00      X       
+ATOM      8  O   SER X   2      44.750  44.920  74.750  1.00  0.00      X       
+ATOM      9  SC1 SER X   2      45.969  42.789  71.563  1.00  0.00      X       
+ATOM     10  N   SER X   3      43.688  42.863  74.843  1.00  0.00      X       
+ATOM     11  CA  SER X   3      43.340  43.080  76.250  1.00  0.00      X       
+ATOM     12  C   SER X   3      44.090  42.110  77.140  1.00  0.00      X       
+ATOM     13  O   SER X   3      44.110  40.900  76.900  1.00  0.00      X       
+ATOM     14  SC1 SER X   3      41.481  43.630  76.126  1.00  0.00      X       
+ATOM     15  N   PHE X   4      44.757  42.713  78.236  1.00  0.00      X       
+ATOM     16  CA  PHE X   4      45.420  41.790  79.170  1.00  0.00      X       
+ATOM     17  C   PHE X   4      44.870  41.640  80.540  1.00  0.00      X       
+ATOM     18  O   PHE X   4      44.540  42.650  81.200  1.00  0.00      X       
+ATOM     19  SC1 PHE X   4      47.441  42.162  78.429  1.00  0.00      X       
+ATOM     20  SC2 PHE X   4      48.551  41.045  76.430  1.00  0.00      X       
+ATOM     21  SC3 PHE X   4      48.539  43.024  76.316  1.00  0.00      X       
+ATOM     22  N   LEU X   5      44.625  40.337  80.919  1.00  0.00      X       
+ATOM     23  CA  LEU X   5      44.030  40.040  82.170  1.00  0.00      X       
+ATOM     24  C   LEU X   5      44.860  40.450  83.340  1.00  0.00      X       
+ATOM     25  O   LEU X   5      46.090  40.570  83.270  1.00  0.00      X       
+ATOM     26  SC1 LEU X   5      42.657  37.715  81.792  1.00  0.00      X       
+ATOM     27  N   SER X   6      44.134  40.784  84.485  1.00  0.00      X       
+ATOM     28  CA  SER X   6      44.930  41.130  85.740  1.00  0.00      X       
+ATOM     29  C   SER X   6      45.940  40.080  86.130  1.00  0.00      X       
+ATOM     30  O   SER X   6      45.630  38.890  85.870  1.00  0.00      X       
+ATOM     31  SC1 SER X   6      44.216  41.327  87.649  1.00  0.00      X       
+ATOM     32  N   PRO X   7      47.060  40.290  86.730  1.00  0.00      X       
+ATOM     33  CA  PRO X   7      48.010  39.210  86.740  1.00  0.00      X       
+ATOM     34  C   PRO X   7      47.710  38.340  88.010  1.00  0.00      X       
+ATOM     35  O   PRO X   7      48.270  37.260  88.200  1.00  0.00      X       
+ATOM     36  SC1 PRO X   7      48.667  40.900  87.243  1.00  0.00      X       
+ATOM     37  N   GLU X   8      46.718  38.932  88.792  1.00  0.00      X       
+ATOM     38  CA  GLU X   8      46.100  38.310  89.980  1.00  0.00      X       
+ATOM     39  C   GLU X   8      44.780  37.600  89.730  1.00  0.00      X       
+ATOM     40  O   GLU X   8      44.170  37.010  90.630  1.00  0.00      X       
+ATOM     41  SC1 GLU X   8      46.789  40.443  92.551  1.00  0.00      X       
+ATOM     42  N   HIS X   9      44.409  37.716  88.371  1.00  0.00      X       
+ATOM     43  CA  HIS X   9      43.150  36.950  87.900  1.00  0.00      X       
+ATOM     44  C   HIS X   9      42.610  35.610  88.330  1.00  0.00      X       
+ATOM     45  O   HIS X   9      41.430  35.450  88.690  1.00  0.00      X       
+ATOM     46  SC1 HIS X   9      42.545  36.550  86.035  1.00  0.00      X       
+ATOM     47  SC2 HIS X   9      41.067  35.036  84.902  1.00  0.00      X       
+ATOM     48  SC3 HIS X   9      40.393  36.680  85.101  1.00  0.00      X       
+ATOM     49  N   GLN X  10      43.524  34.567  88.314  1.00  0.00      X       
+ATOM     50  CA  GLN X  10      42.990  33.270  88.940  1.00  0.00      X       
+ATOM     51  C   GLN X  10      42.610  33.390  90.450  1.00  0.00      X       
+ATOM     52  O   GLN X  10      41.580  32.820  90.900  1.00  0.00      X       
+ATOM     53  SC1 GLN X  10      45.003  31.049  87.199  1.00  0.00      X       
+ATOM     54  N   ARG X  11      43.399  34.089  91.246  1.00  0.00      X       
+ATOM     55  CA  ARG X  11      42.850  34.290  92.680  1.00  0.00      X       
+ATOM     56  C   ARG X  11      41.630  35.250  92.830  1.00  0.00      X       
+ATOM     57  O   ARG X  11      40.870  35.110  93.810  1.00  0.00      X       
+ATOM     58  SC1 ARG X  11      44.576  34.106  93.760  1.00  0.00      X       
+ATOM     59  SC2 ARG X  11      45.011  31.859  94.924  1.00  0.00      X       
+ATOM     60  SC3 ARG X  11      46.185  29.739  95.849  1.00  0.00      X       
+ATOM     61  SC4 ARG X  11      44.490  29.882  95.986  1.00  0.00      X       
+ATOM     62  N   VAL X  12      41.423  36.171  91.819  1.00  0.00      X       
+ATOM     63  CA  VAL X  12      40.180  36.970  91.890  1.00  0.00      X       
+ATOM     64  C   VAL X  12      38.930  36.320  91.460  1.00  0.00      X       
+ATOM     65  O   VAL X  12      37.950  36.440  92.140  1.00  0.00      X       
+ATOM     66  SC1 VAL X  12      40.353  38.870  91.493  1.00  0.00      X       
+ATOM     67  N   GLN X  13      39.109  35.508  90.351  1.00  0.00      X       
+ATOM     68  CA  GLN X  13      38.110  34.390  90.110  1.00  0.00      X       
+ATOM     69  C   GLN X  13      37.740  33.560  91.350  1.00  0.00      X       
+ATOM     70  O   GLN X  13      36.580  33.500  91.780  1.00  0.00      X       
+ATOM     71  SC1 GLN X  13      37.509  35.435  87.793  1.00  0.00      X       
+ATOM     72  N   GLN X  14      38.789  33.030  92.001  1.00  0.00      X       
+ATOM     73  CA  GLN X  14      38.520  32.210  93.230  1.00  0.00      X       
+ATOM     74  C   GLN X  14      38.200  33.090  94.460  1.00  0.00      X       
+ATOM     75  O   GLN X  14      38.530  32.770  95.610  1.00  0.00      X       
+ATOM     76  SC1 GLN X  14      41.026  29.874  92.513  1.00  0.00      X       
+ATOM     77  N   ARG X  15      37.421  34.243  94.261  1.00  0.00      X       
+ATOM     78  CA  ARG X  15      36.720  34.840  95.360  1.00  0.00      X       
+ATOM     79  C   ARG X  15      35.320  34.210  95.620  1.00  0.00      X       
+ATOM     80  O   ARG X  15      34.805  33.905  95.700  1.00  0.00      X       
+ATOM     81  SC1 ARG X  15      37.250  36.741  95.196  1.00  0.00      X       
+ATOM     82  SC2 ARG X  15      38.330  39.006  95.067  1.00  0.00      X       
+ATOM     83  SC3 ARG X  15      40.015  40.993  94.961  1.00  0.00      X       
+ATOM     84  SC4 ARG X  15      38.605  41.058  94.122  1.00  0.00      X       
+ATOM     85  SC2 OCT X  16      43.935  44.582  77.496  1.00  0.00      X       
+ATOM     86  SC3 OCT X  16      43.562  44.470  77.292  1.00  0.00      X       
+END

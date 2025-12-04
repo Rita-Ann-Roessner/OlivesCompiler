@@ -157,7 +157,7 @@ def add_OLIVES(states_str, iteration, ts_scaling=False, unique_pair_scaling=Fals
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
     cmd = [
-    "python3", f"{base_dir}/OLIVES_v2.3_alpha_0.1.1.py",
+    "python3", f"{base_dir}/OLIVES_v2.9.1_alpha_0.2.2.py",
     "-i", "molecule_0.itp", # itp of protein system where olives will be added
     "-c", f"{states_str}", 
     ]
